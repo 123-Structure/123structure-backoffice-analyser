@@ -24,7 +24,9 @@ dotenv.config();
 const maxRetries = 3;
 
 async function scrapePages(urls: IUrl[], retries = 0) {
-  console.log(chalk.bgGray(`${getCurrentTimestamp()}`));
+  const timestamp = getCurrentTimestamp();
+
+  console.log(chalk.bgGray(`🚀 ${timestamp}`));
   console.log(chalk.bgCyan("🏁 Starting scraping..."));
 
   let browser;
@@ -59,10 +61,34 @@ async function scrapePages(urls: IUrl[], retries = 0) {
       await page.goto(url.path);
       await page.waitForSelector("#datatable");
 
-      const data = await convertTableToJSON(page);
-      console.log(`Scraped data from URL: [${url.id}] - ${url.path}`);
+      let data: any[] = [];
 
-      generateReport(url, data);
+      let hasNextPage = true;
+      let pageCounter = 1;
+
+      while (hasNextPage) {
+        console.log(
+          `Scraped data from URL: [${url.id} - Page ${pageCounter}] - ${url.path}?page=${pageCounter}`
+        );
+        const pageData = await convertTableToJSON(page);
+        data = data.concat(pageData);
+
+        const nextPageAnchor = await page.evaluate(() => {
+          const anchors = Array.from(document.querySelectorAll("a"));
+          return anchors.find((a) => a.innerText.includes("Suivant"));
+        });
+
+        if (!nextPageAnchor) {
+          hasNextPage = false;
+        } else {
+          pageCounter++;
+          const nextPageUrl = `${url.path}?page=${pageCounter}`;
+          await page.goto(nextPageUrl);
+          await page.waitForSelector("#datatable");
+        }
+      }
+
+      generateReport(timestamp, url, data);
     }
 
     await browser.close();
@@ -94,14 +120,14 @@ async function scrapePages(urls: IUrl[], retries = 0) {
 // Schedule the script to run periodically
 scrapePages(scrapedUrl);
 
-if (process.env.APP_MODE === "DEVELOPMENT") {
-  cron.schedule(cronScheduleEveryMinute, async () => {
-    await scrapePages(scrapedUrl);
-  });
-}
+// if (process.env.APP_MODE === "DEVELOPMENT") {
+//   cron.schedule(cronScheduleEveryMinute, async () => {
+//     await scrapePages(scrapedUrl);
+//   });
+// }
 
-if (process.env.APP_MODE === "PRODUCTION") {
-  cron.schedule(cronScheduleOnWorkDay, async () => {
-    await scrapePages(scrapedUrl);
-  });
-}
+// if (process.env.APP_MODE === "PRODUCTION") {
+//   cron.schedule(cronScheduleOnWorkDay, async () => {
+//     await scrapePages(scrapedUrl);
+//   });
+// }

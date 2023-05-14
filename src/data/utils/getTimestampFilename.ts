@@ -1,12 +1,8 @@
-import { getCurrentTimestamp } from "./getCurrentTimestamp";
-
-export const getCurrentTimestampFilename = () => {
-  const timestamp = getCurrentTimestamp();
-
+export const getCurrentTimestampFilename = (timestamp: string) => {
   const date = timestamp.split(" ")[0];
   const time = timestamp.split(" ")[1];
 
-  const day = date.split("/")[1];
+  const day = date.split("/")[0];
   const month = date.split("/")[1];
   const year = date.split("/")[2].slice(2);
 
