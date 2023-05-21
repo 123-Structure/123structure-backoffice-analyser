@@ -1,7 +1,5 @@
 import puppeteer from "puppeteer";
 import cron from "node-cron";
-import fs from "fs";
-import path from "path";
 import dotenv from "dotenv";
 import chalk from "chalk";
 
@@ -16,6 +14,7 @@ import {
 import { retryDelay } from "./data/utils/retryDelay";
 import { getCurrentTimestamp } from "./data/utils/getCurrentTimestamp";
 import { generateReport } from "./data/utils/generateReport";
+import { devisSpecifiques } from "./data/utils/notion/devisSpecifique";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -33,7 +32,7 @@ async function scrapePages(urls: IUrl[], retries = 0) {
 
   try {
     browser = await puppeteer.launch({
-      headless: false,
+      headless: "new",
     });
     const page = await browser.newPage();
 
@@ -118,16 +117,21 @@ async function scrapePages(urls: IUrl[], retries = 0) {
 }
 
 // Schedule the script to run periodically
-scrapePages(scrapedUrl);
-
-// if (process.env.APP_MODE === "DEVELOPMENT") {
-//   cron.schedule(cronScheduleEveryMinute, async () => {
-//     await scrapePages(scrapedUrl);
-//   });
-// }
-
-// if (process.env.APP_MODE === "PRODUCTION") {
-//   cron.schedule(cronScheduleOnWorkDay, async () => {
-//     await scrapePages(scrapedUrl);
-//   });
-// }
+(async () => {
+  await scrapePages(scrapedUrl);
+  await devisSpecifiques();
+  
+  // if (process.env.APP_MODE === "DEVELOPMENT") {
+  //   cron.schedule(cronScheduleEveryMinute, async () => {
+  //     await scrapePages(scrapedUrl);
+  //     await devisSpecifiques();
+  //   });
+  // }
+  
+  // if (process.env.APP_MODE === "PRODUCTION") {
+  //   cron.schedule(cronScheduleOnWorkDay, async () => {
+  //     await scrapePages(scrapedUrl);
+  //     await devisSpecifiques();
+  //   });
+  // }
+})();

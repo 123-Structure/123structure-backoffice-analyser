@@ -16,6 +16,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
+    "@notionhq/client": "^2.2.5",
     "@types/node-cron": "^3.0.7",
     "chalk": "4.1.2",
     "dotenv": "^16.0.3",

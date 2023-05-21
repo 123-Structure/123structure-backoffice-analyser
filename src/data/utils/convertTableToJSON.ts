@@ -7,8 +7,8 @@ export const convertTableToJSON = async (page: Page) => {
       const rows = table.querySelectorAll("tr");
 
       const jsonData: any[] = [];
-      const headers = Array.from(rows[0].querySelectorAll("th")).map(
-        (th) => th.innerText
+      const headers = Array.from(rows[0].querySelectorAll("th")).map((th) =>
+        th.innerText.trim()
       );
 
       for (let i = 2; i < rows.length; i++) {
