@@ -32,7 +32,7 @@ async function scrapePages(urls: IUrl[], retries = 0) {
 
   try {
     browser = await puppeteer.launch({
-      headless: "new",
+      headless: false,
     });
     const page = await browser.newPage();
 
@@ -69,7 +69,7 @@ async function scrapePages(urls: IUrl[], retries = 0) {
         console.log(
           `Scraped data from URL: [${url.id} - Page ${pageCounter}] - ${url.path}?page=${pageCounter}`
         );
-        const pageData = await convertTableToJSON(page);
+        const pageData = await convertTableToJSON(page, browser, url.id);
         data = data.concat(pageData);
 
         const nextPageAnchor = await page.evaluate(() => {
@@ -80,6 +80,9 @@ async function scrapePages(urls: IUrl[], retries = 0) {
         if (!nextPageAnchor) {
           hasNextPage = false;
         } else {
+          //
+          hasNextPage = false;
+          //
           pageCounter++;
           const nextPageUrl = `${url.path}?page=${pageCounter}`;
           await page.goto(nextPageUrl);
@@ -120,14 +123,14 @@ async function scrapePages(urls: IUrl[], retries = 0) {
 (async () => {
   await scrapePages(scrapedUrl);
   await devisSpecifiques();
-  
+
   // if (process.env.APP_MODE === "DEVELOPMENT") {
   //   cron.schedule(cronScheduleEveryMinute, async () => {
   //     await scrapePages(scrapedUrl);
   //     await devisSpecifiques();
   //   });
   // }
-  
+
   // if (process.env.APP_MODE === "PRODUCTION") {
   //   cron.schedule(cronScheduleOnWorkDay, async () => {
   //     await scrapePages(scrapedUrl);

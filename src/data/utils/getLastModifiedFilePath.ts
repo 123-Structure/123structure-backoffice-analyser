@@ -16,10 +16,10 @@ export const getLastModifiedFilePath = (prefix: string) => {
     const dateFolderPath = path.join(folderPath, dateFolder);
     const timeFolders = fs.readdirSync(dateFolderPath);
 
-    // Sort time folders in descending order
+    // Sort time folders in descending order based on "hhmm" format
     const sortedTimeFolders = timeFolders.sort((a, b) => {
-      const timeA = parseInt(a, 10);
-      const timeB = parseInt(b, 10);
+      const timeA = parseInt(a.slice(-4), 10); // Extract the last 4 characters as "hhmm"
+      const timeB = parseInt(b.slice(-4), 10); // Extract the last 4 characters as "hhmm"
       return timeB - timeA;
     });
 

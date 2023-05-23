@@ -6,48 +6,48 @@ export const scrapedUrl: IUrl[] = [
     id: "demandes_devis_specifiques",
     path: "https://app.123structure.fr/backoffice/userqcm/index/out",
   },
-  {
-    id: "demandes_devis_abandonnees",
-    path: "https://app.123structure.fr/backoffice/userqcm/index/pending",
-  },
-  {
-    id: "devis_sauvegardees",
-    path: "https://app.123structure.fr/backoffice/quote/index/created",
-  },
-  {
-    id: "devis_annules-expires",
-    path: "https://app.123structure.fr/backoffice/quote/index/cancelled",
-  },
-  {
-    id: "commandes_01-attente-validation-initiale-client",
-    path: "https://app.123structure.fr/backoffice/order/index/created",
-  },
-  {
-    id: "commandes_02-attente-paiement-initiale",
-    path: "https://app.123structure.fr/backoffice/order/index/completed",
-  },
-  {
-    id: "commandes_03-attente-validation-123-structure",
-    path: "https://app.123structure.fr/backoffice/order/index/pending",
-  },
-  {
-    id: "commandes_04-attente-validation-client",
-    path: "https://app.123structure.fr/backoffice/order/index/waiting",
-  },
-  {
-    id: "commandes_05-en-cours",
-    path: "https://app.123structure.fr/backoffice/order/index/in_progress",
-  },
-  {
-    id: "commandes_06-attente-solde",
-    path: "https://app.123structure.fr/backoffice/order/index/payment",
-  },
-  {
-    id: "commandes_07-terminees",
-    path: "https://app.123structure.fr/backoffice/order/index/finished",
-  },
-  {
-    id: "commandes_00-annulees",
-    path: "https://app.123structure.fr/backoffice/order/index/cancelled",
-  },
+  // {
+  //   id: "demandes_devis_abandonnees",
+  //   path: "https://app.123structure.fr/backoffice/userqcm/index/pending",
+  // },
+  // {
+  //   id: "devis_sauvegardees",
+  //   path: "https://app.123structure.fr/backoffice/quote/index/created",
+  // },
+  // {
+  //   id: "devis_annules-expires",
+  //   path: "https://app.123structure.fr/backoffice/quote/index/cancelled",
+  // },
+  // {
+  //   id: "commandes_01-attente-validation-initiale-client",
+  //   path: "https://app.123structure.fr/backoffice/order/index/created",
+  // },
+  // {
+  //   id: "commandes_02-attente-paiement-initiale",
+  //   path: "https://app.123structure.fr/backoffice/order/index/completed",
+  // },
+  // {
+  //   id: "commandes_03-attente-validation-123-structure",
+  //   path: "https://app.123structure.fr/backoffice/order/index/pending",
+  // },
+  // {
+  //   id: "commandes_04-attente-validation-client",
+  //   path: "https://app.123structure.fr/backoffice/order/index/waiting",
+  // },
+  // {
+  //   id: "commandes_05-en-cours",
+  //   path: "https://app.123structure.fr/backoffice/order/index/in_progress",
+  // },
+  // {
+  //   id: "commandes_06-attente-solde",
+  //   path: "https://app.123structure.fr/backoffice/order/index/payment",
+  // },
+  // {
+  //   id: "commandes_07-terminees",
+  //   path: "https://app.123structure.fr/backoffice/order/index/finished",
+  // },
+  // {
+  //   id: "commandes_00-annulees",
+  //   path: "https://app.123structure.fr/backoffice/order/index/cancelled",
+  // },
 ];
