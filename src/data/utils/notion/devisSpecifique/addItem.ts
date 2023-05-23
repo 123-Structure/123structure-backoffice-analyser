@@ -106,7 +106,6 @@ export const addItem = async (props: IDevisSpecifique) => {
             ],
           },
         },
-
         {
           object: "block",
           heading_2: {
@@ -117,7 +116,7 @@ export const addItem = async (props: IDevisSpecifique) => {
                 },
               },
             ],
-            color: "yellow_background",
+            color: "gray_background",
           },
         },
         {
@@ -135,7 +134,152 @@ export const addItem = async (props: IDevisSpecifique) => {
         },
         {
           object: "block",
+          heading_2: {
+            rich_text: [
+              {
+                text: {
+                  content: "Commentaires",
+                },
+              },
+            ],
+            color: "red_background",
+          },
+        },
+        {
+          object: "block",
+          paragraph: {
+            rich_text: [
+              {
+                type: "text",
+                text: {
+                  content: "",
+                },
+              },
+            ],
+          },
+        },
+        {
+          object: "block",
           divider: {},
+        },
+        {
+          object: "block",
+          toggle: {
+            rich_text: [
+              {
+                type: "text",
+                text: {
+                  content: "📧 Exemples de mails",
+                },
+                annotations: {
+                  bold: true,
+                },
+              },
+            ],
+            children: [
+              {
+                object: "block",
+                paragraph: {
+                  rich_text: [
+                    {
+                      type: "text",
+                      text: {
+                        content: "Objet : XXX",
+                      },
+                      annotations: {
+                        italic: true,
+                      },
+                    },
+                  ],
+                  color: "yellow_background",
+                },
+              },
+              {
+                object: "block",
+                toggle: {
+                  rich_text: [
+                    {
+                      type: "text",
+                      text: {
+                        content: "1ère prise de contact (J+1)",
+                      },
+                    },
+                  ],
+                  children: [
+                    {
+                      object: "block",
+                      paragraph: {
+                        rich_text: [
+                          {
+                            type: "text",
+                            text: {
+                              content: "Lorem Ipsum",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                object: "block",
+                toggle: {
+                  rich_text: [
+                    {
+                      type: "text",
+                      text: {
+                        content: "1ère relance (J+7)",
+                      },
+                    },
+                  ],
+                  children: [
+                    {
+                      object: "block",
+                      paragraph: {
+                        rich_text: [
+                          {
+                            type: "text",
+                            text: {
+                              content: "Lorem Ipsum",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                object: "block",
+                toggle: {
+                  rich_text: [
+                    {
+                      type: "text",
+                      text: {
+                        content: "Dernière relance (J+14)",
+                      },
+                    },
+                  ],
+                  children: [
+                    {
+                      object: "block",
+                      paragraph: {
+                        rich_text: [
+                          {
+                            type: "text",
+                            text: {
+                              content: "Lorem Ipsum",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
         },
       ],
     });
