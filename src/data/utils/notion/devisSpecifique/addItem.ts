@@ -6,11 +6,64 @@ import { emailObject } from "../email/emailObject";
 import { firstContact } from "../email/firstContact";
 import { firstReminder } from "../email/firstReminder";
 import { lastReminder } from "../email/lastReminder";
+import chalk from "chalk";
+import { addDaysToDate } from "../../addDaysToDate";
 
 // Initializing a client
 const notion = new Client({
   auth: process.env.NOTION_SECRET_KEY,
 });
+
+export const status = (demandeDevis: IDevisSpecifique) => {
+  // const start = convertToISODate(demandeDevis["Créé le"], "-", "-");
+  const firstContact = convertToISODate(
+    addDaysToDate(demandeDevis["Créé le"], 1),
+    "/",
+    "-"
+  );
+  const firstReminder = convertToISODate(
+    addDaysToDate(demandeDevis["Créé le"], 8),
+    "/",
+    "-"
+  );
+  const lastReminder = convertToISODate(
+    addDaysToDate(demandeDevis["Créé le"], 15),
+    "/",
+    "-"
+  );
+  const inactif = convertToISODate(
+    addDaysToDate(demandeDevis["Créé le"], 22),
+    "/",
+    "-"
+  );
+  const currentDate = new Date();
+
+  if (
+    currentDate >= new Date(firstContact) &&
+    currentDate < new Date(firstReminder)
+  ) {
+    return "⌛ 1er Contact (J+1)";
+  }
+
+  if (
+    currentDate >= new Date(firstReminder) &&
+    currentDate < new Date(lastReminder)
+  ) {
+    return "⌛ 1ère relance (J+7)";
+  }
+
+  if (
+    currentDate >= new Date(lastReminder) &&
+    currentDate < new Date(inactif)
+  ) {
+    return "⌛ Dernière relance (J+14)";
+  }
+
+  if (currentDate >= new Date(inactif)) {
+    return "⏸️ Inactif";
+  }
+  return "🎉 Nouveau";
+};
 
 export const addItem = async (demandeDevis: IDevisSpecifique) => {
   try {
@@ -65,7 +118,7 @@ export const addItem = async (demandeDevis: IDevisSpecifique) => {
         },
         "Créé le": {
           date: {
-            start: convertToISODate(demandeDevis["Créé le"]),
+            start: convertToISODate(demandeDevis["Créé le"], "-", "-"),
           },
         },
         "Type de projet": {
@@ -83,7 +136,7 @@ export const addItem = async (demandeDevis: IDevisSpecifique) => {
         },
         Status: {
           select: {
-            name: "🎉 Nouveau",
+            name: status(demandeDevis),
           },
         },
       },
@@ -249,9 +302,9 @@ export const addItem = async (demandeDevis: IDevisSpecifique) => {
       ],
     });
     console.log(
-      `❓ New Item (Demande de devis spécifique) : ${demandeDevis.ID}`
+      `❓🎉 New Item (Demande de devis spécifique) : ${demandeDevis.ID}`
     );
   } catch (error: any) {
-    console.error("Add Item Error :", error.message);
+    console.error(chalk.bgRed("Add Item Error :", error.message));
   }
 };

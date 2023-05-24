@@ -1,8 +1,15 @@
+import chalk from "chalk";
+import { retryDelay } from "../../retryDelay";
+
 export const checkPageExist = async (
   databaseId: string,
   property: string,
-  targetValue: string
+  targetValue: string,
+  retries = 0
 ) => {
+  // Define the number of retries and the delay in milliseconds
+  const maxRetries = 3;
+
   const url = `https://api.notion.com/v1/databases/${databaseId}/query`;
   const apiKey = process.env.NOTION_SECRET_KEY;
   const notionVersion = "2022-06-28";
@@ -25,10 +32,24 @@ export const checkPageExist = async (
   });
 
   if (!response.ok) {
-    throw new Error(`HTTP error! Status : ${response.status}`);
+    console.error(chalk.bgRed(`HTTP error! Status : ${response.status}`));
+    
+    if (retries < maxRetries) {
+      console.log(
+        `Retrying after ${retryDelay(0, 0, 5) / 1000} seconds... (${
+          retries + 1
+        }/${maxRetries})`
+      );
+      await new Promise((resolve) => setTimeout(resolve, retryDelay(0, 0, 10)));
+      await checkPageExist(databaseId, property, targetValue, retries + 1);
+    } else {
+      console.log(chalk.bgRed("Max retries reached. Exiting..."));
+      // Forcefully exit the script with a non-zero exit code
+      process.exit(1);
+    }
   }
 
   const data = await response.json();
   const pages = data.results;
-  return pages.length > 0;
+  return { test: pages.length > 0, page: pages[0] };
 };

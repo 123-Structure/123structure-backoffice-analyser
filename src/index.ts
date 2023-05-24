@@ -8,7 +8,7 @@ import { convertTableToJSON } from "./data/utils/convertTableToJSON";
 import { auth } from "./data/constants/auth";
 import { scrapedUrl } from "./data/constants/scrapedUrl";
 import {
-  cronScheduleEveryMinute,
+  cronScheduleEveryFifteenMinutes,
   cronScheduleOnWorkDay,
 } from "./data/constants/cronSchedule";
 import { retryDelay } from "./data/utils/retryDelay";
@@ -25,14 +25,15 @@ const maxRetries = 3;
 async function scrapePages(urls: IUrl[], retries = 0) {
   const timestamp = getCurrentTimestamp();
 
+  console.log("");
   console.log(chalk.bgGray(`🚀 ${timestamp}`));
-  console.log(chalk.bgCyan("🏁 Starting scraping..."));
+  console.log(chalk.bgCyan("🚩 Starting scraping..."));
 
   let browser;
 
   try {
     browser = await puppeteer.launch({
-      headless: false,
+      headless: "new",
     });
     const page = await browser.newPage();
 
@@ -80,9 +81,9 @@ async function scrapePages(urls: IUrl[], retries = 0) {
         if (!nextPageAnchor) {
           hasNextPage = false;
         } else {
-          //
-          hasNextPage = false;
-          //
+          // //
+          // hasNextPage = false;
+          // //
           pageCounter++;
           const nextPageUrl = `${url.path}?page=${pageCounter}`;
           await page.goto(nextPageUrl);
@@ -94,7 +95,7 @@ async function scrapePages(urls: IUrl[], retries = 0) {
     }
 
     await browser.close();
-    console.log(chalk.bgGreen("🎉 Scraping complete"));
+    console.log(chalk.bgGreen("🏁 Scraping complete"));
     console.log("");
   } catch (error) {
     console.error(chalk.bgRed("Scraping failed:", error));
@@ -124,17 +125,17 @@ async function scrapePages(urls: IUrl[], retries = 0) {
   await scrapePages(scrapedUrl);
   await devisSpecifiques();
 
-  // if (process.env.APP_MODE === "DEVELOPMENT") {
-  //   cron.schedule(cronScheduleEveryMinute, async () => {
-  //     await scrapePages(scrapedUrl);
-  //     await devisSpecifiques();
-  //   });
-  // }
+  if (process.env.APP_MODE === "DEVELOPMENT") {
+    cron.schedule(cronScheduleEveryFifteenMinutes, async () => {
+      await scrapePages(scrapedUrl);
+      await devisSpecifiques();
+    });
+  }
 
-  // if (process.env.APP_MODE === "PRODUCTION") {
-  //   cron.schedule(cronScheduleOnWorkDay, async () => {
-  //     await scrapePages(scrapedUrl);
-  //     await devisSpecifiques();
-  //   });
-  // }
+  if (process.env.APP_MODE === "PRODUCTION") {
+    cron.schedule(cronScheduleOnWorkDay, async () => {
+      await scrapePages(scrapedUrl);
+      await devisSpecifiques();
+    });
+  }
 })();

@@ -1,5 +1,9 @@
-export const convertToISODate = (dateString: string) => {
+export const convertToISODate = (
+  dateString: string,
+  splitter: string,
+  separator: string
+) => {
   // Split the date string into day, month, and year components
-  const [day, month, year] = dateString.split("-");
-  return `${year}-${month}-${day}`;
+  const [day, month, year] = dateString.split(splitter);
+  return [year, month, day].join(separator);
 };

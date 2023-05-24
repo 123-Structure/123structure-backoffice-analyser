@@ -5,11 +5,10 @@ import { getLastModifiedFilePath } from "../../getLastModifiedFilePath";
 import { checkPageExist } from "../utils/checkPageExist";
 import { databaseIdDevisSpecifiques } from "../../../constants/notionDatabaseID";
 import chalk from "chalk";
+import { patchItem } from "./patchItem";
 
 export const devisSpecifiques = async () => {
-  console.log(
-    chalk.bgCyan("🏁 Start reading 'Demande de devis spécifique'...")
-  );
+  console.log(chalk.bgCyan("📖 Reading 'Demande de devis spécifique'..."));
 
   const filePath = getLastModifiedFilePath("demandes_devis_specifiques");
 
@@ -21,12 +20,14 @@ export const devisSpecifiques = async () => {
 
     const data = JSON.parse(jsonData);
 
-    data.forEach((demandeDevis: IDevisSpecifique, index: number) => {
+    data.forEach((demandeDevis: IDevisSpecifique) => {
       // Perform operations with each item in the JSON data
       checkPageExist(databaseIdDevisSpecifiques, "ID", demandeDevis.ID)
         .then((exists) => {
-          if (!exists) {
+          if (!exists.test) {
             addItem(demandeDevis);
+          } else {
+            patchItem(demandeDevis, exists.page);
           }
         })
         .catch((error) => {
