@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  # Service for Puppeteer
+  puppeteer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    stdin_open: true # Keep standard input open to allow for interaction
+    init: true # Use an init process as the entry point for the container
+    cap_add:
+      - SYS_ADMIN # Add the SYS_ADMIN capability to the container
+    tty: true # Allocate a pseudo-TTY for the container
+    container_name: 123str_backoffice_analyser # Set the container name to "123str_backoffice_analyser"
