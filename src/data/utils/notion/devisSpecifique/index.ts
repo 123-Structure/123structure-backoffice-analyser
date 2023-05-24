@@ -21,12 +21,12 @@ export const devisSpecifiques = async () => {
 
     const data = JSON.parse(jsonData);
 
-    data.forEach((item: IDevisSpecifique, index: number) => {
+    data.forEach((demandeDevis: IDevisSpecifique, index: number) => {
       // Perform operations with each item in the JSON data
-      checkPageExist(databaseIdDevisSpecifiques, "ID", item.ID)
+      checkPageExist(databaseIdDevisSpecifiques, "ID", demandeDevis.ID)
         .then((exists) => {
           if (!exists) {
-            addItem(item);
+            addItem(demandeDevis);
           }
         })
         .catch((error) => {

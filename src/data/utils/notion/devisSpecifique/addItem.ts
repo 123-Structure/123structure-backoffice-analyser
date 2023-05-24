@@ -2,13 +2,17 @@ import { Client } from "@notionhq/client";
 import { IDevisSpecifique } from "../../../interfaces/IDevisSpeciques";
 import { databaseIdDevisSpecifiques } from "../../../constants/notionDatabaseID";
 import { convertToISODate } from "../utils/convertToISODate";
+import { emailObject } from "../email/emailObject";
+import { firstContact } from "../email/firstContact";
+import { firstReminder } from "../email/firstReminder";
+import { lastReminder } from "../email/lastReminder";
 
 // Initializing a client
 const notion = new Client({
   auth: process.env.NOTION_SECRET_KEY,
 });
 
-export const addItem = async (props: IDevisSpecifique) => {
+export const addItem = async (demandeDevis: IDevisSpecifique) => {
   try {
     await notion.pages.create({
       parent: { database_id: databaseIdDevisSpecifiques },
@@ -17,7 +21,7 @@ export const addItem = async (props: IDevisSpecifique) => {
           title: [
             {
               text: {
-                content: props.ID,
+                content: demandeDevis.ID,
               },
             },
           ],
@@ -27,23 +31,24 @@ export const addItem = async (props: IDevisSpecifique) => {
             {
               type: "text",
               text: {
-                content: props.Nom,
+                content: demandeDevis.Nom,
               },
             },
           ],
         },
         Téléphone: {
-          phone_number: props.Téléphone === "" ? "-" : props.Téléphone,
+          phone_number:
+            demandeDevis.Téléphone === "" ? "-" : demandeDevis.Téléphone,
         },
         Email: {
-          email: props.Email === "" ? "-" : props.Email,
+          email: demandeDevis.Email === "" ? "-" : demandeDevis.Email,
         },
         "Code postal": {
           rich_text: [
             {
               type: "text",
               text: {
-                content: props["Code postal"],
+                content: demandeDevis["Code postal"],
               },
             },
           ],
@@ -53,25 +58,27 @@ export const addItem = async (props: IDevisSpecifique) => {
             {
               type: "text",
               text: {
-                content: props.Ville,
+                content: demandeDevis.Ville,
               },
             },
           ],
         },
         "Créé le": {
           date: {
-            start: convertToISODate(props["Créé le"]),
+            start: convertToISODate(demandeDevis["Créé le"]),
           },
         },
         "Type de projet": {
           select: {
-            name: `🏡 ${props["Type de projet"]}`,
+            name: `🏡 ${demandeDevis["Type de projet"]}`,
           },
         },
         Type: {
           select: {
             name:
-              props.Type === "Pro" ? `👷‍♂️ ${props.Type}` : `👤 ${props.Type}`,
+              demandeDevis.Type === "Pro"
+                ? `👷‍♂️ ${demandeDevis.Type}`
+                : `👤 ${demandeDevis.Type}`,
           },
         },
         Status: {
@@ -88,13 +95,13 @@ export const addItem = async (props: IDevisSpecifique) => {
               {
                 type: "text",
                 text: {
-                  content: `❓ ${props.ID} - ${props.Nom} - ${props["Type de projet"]} (${props["Code postal"]} ${props.Ville})`,
+                  content: `❓ ${demandeDevis.ID} - ${demandeDevis.Nom} - ${demandeDevis["Type de projet"]} (${demandeDevis["Code postal"]} ${demandeDevis.Ville})`,
                   link: {
                     url:
-                      props.Type === "Particulier"
-                        ? `https://app.123structure.fr/backoffice/userqcm/show/${props.ID}/part`
-                        : props.Type === "Pro"
-                        ? `https://app.123structure.fr/backoffice/userqcm/show/${props.ID}/pro`
+                      demandeDevis.Type === "Particulier"
+                        ? `https://app.123structure.fr/backoffice/userqcm/show/${demandeDevis.ID}/part`
+                        : demandeDevis.Type === "Pro"
+                        ? `https://app.123structure.fr/backoffice/userqcm/show/${demandeDevis.ID}/pro`
                         : "",
                   },
                 },
@@ -126,7 +133,7 @@ export const addItem = async (props: IDevisSpecifique) => {
               {
                 type: "text",
                 text: {
-                  content: props["Informations complémentaires"],
+                  content: demandeDevis["Informations complémentaires"],
                 },
               },
             ],
@@ -184,7 +191,7 @@ export const addItem = async (props: IDevisSpecifique) => {
                     {
                       type: "text",
                       text: {
-                        content: "Objet : XXX",
+                        content: `Objet : ${emailObject(demandeDevis)}`,
                       },
                       annotations: {
                         italic: true,
@@ -205,21 +212,7 @@ export const addItem = async (props: IDevisSpecifique) => {
                       },
                     },
                   ],
-                  children: [
-                    {
-                      object: "block",
-                      paragraph: {
-                        rich_text: [
-                          {
-                            type: "text",
-                            text: {
-                              content: "Lorem Ipsum",
-                            },
-                          },
-                        ],
-                      },
-                    },
-                  ],
+                  children: firstContact(demandeDevis),
                 },
               },
               {
@@ -233,21 +226,7 @@ export const addItem = async (props: IDevisSpecifique) => {
                       },
                     },
                   ],
-                  children: [
-                    {
-                      object: "block",
-                      paragraph: {
-                        rich_text: [
-                          {
-                            type: "text",
-                            text: {
-                              content: "Lorem Ipsum",
-                            },
-                          },
-                        ],
-                      },
-                    },
-                  ],
+                  children: firstReminder(demandeDevis),
                 },
               },
               {
@@ -261,21 +240,7 @@ export const addItem = async (props: IDevisSpecifique) => {
                       },
                     },
                   ],
-                  children: [
-                    {
-                      object: "block",
-                      paragraph: {
-                        rich_text: [
-                          {
-                            type: "text",
-                            text: {
-                              content: "Lorem Ipsum",
-                            },
-                          },
-                        ],
-                      },
-                    },
-                  ],
+                  children: lastReminder(demandeDevis),
                 },
               },
             ],
@@ -283,7 +248,9 @@ export const addItem = async (props: IDevisSpecifique) => {
         },
       ],
     });
-    console.log(`❓ New Item (Demande de devis spécifique) : ${props.ID}`);
+    console.log(
+      `❓ New Item (Demande de devis spécifique) : ${demandeDevis.ID}`
+    );
   } catch (error: any) {
     console.error("Add Item Error :", error.message);
   }
