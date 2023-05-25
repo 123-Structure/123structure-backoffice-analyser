@@ -70,7 +70,7 @@ async function scrapePages(urls: IUrl[], retries = 0) {
       let hasNextPage = true;
       let pageCounter = 1;
 
-      while (hasNextPage) {
+      while (hasNextPage && pageCounter <= 5) {
         console.log(
           `Scraped data from URL : [${url.id} - Page ${pageCounter}] - ${url.path}?page=${pageCounter}`
         );
@@ -125,9 +125,9 @@ async function scrapePages(urls: IUrl[], retries = 0) {
 }
 
 const launchScraping = async () => {
-  // await scrapePages(scrapedUrl);
+  await scrapePages(scrapedUrl);
   await demandeSpecifique();
-  // await demandeAbandonne();
+  await demandeAbandonne();
 };
 
 // Schedule the script to run periodically

@@ -31,10 +31,12 @@ export const demandeSpecifique = async () => {
       // Perform operations with each item in the JSON data
       checkPageExist(databaseIdDemandesSpecifiques, "ID", demandeSpecifique.ID)
         .then((exists) => {
-          if (!exists.test) {
-            addItem(demandeSpecifique);
-          } else {
-            patchItem(demandeSpecifique, exists.pages);
+          if (exists !== undefined) {
+            if (!exists.test) {
+              addItem(demandeSpecifique);
+            } else {
+              patchItem(demandeSpecifique, exists.pages);
+            }
           }
         })
         .catch((error) => {

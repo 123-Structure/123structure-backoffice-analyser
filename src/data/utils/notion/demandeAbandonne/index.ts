@@ -34,10 +34,12 @@ export const demandeAbandonne = async () => {
         "ID",
         demandeAbandonne.ID
       ).then((exists) => {
-        if (!exists.test) {
-          addItem(demandeAbandonne);
-        } else {
-          patchItem(demandeAbandonne, exists.pages);
+        if (exists !== undefined) {
+          if (!exists.test) {
+            addItem(demandeAbandonne);
+          } else {
+            patchItem(demandeAbandonne, exists.pages);
+          }
         }
       });
       // .catch((error) => {
