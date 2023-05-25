@@ -1,4 +1,4 @@
-export interface IDevisSpecifique {
+export interface IDemande {
   ID: string;
   Nom: string;
   Téléphone: string;

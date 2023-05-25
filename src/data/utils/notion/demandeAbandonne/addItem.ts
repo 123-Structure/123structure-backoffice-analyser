@@ -1,38 +1,35 @@
 import { Client } from "@notionhq/client";
-import { IDevisSpecifique } from "../../../interfaces/IDevisSpeciques";
-import { databaseIdDevisSpecifiques } from "../../../constants/notionDatabaseID";
+import { IDemande } from "../../../interfaces/IDemande";
+import { databaseIdDemandesAbandonnees } from "../../../constants/notionDatabaseID";
 import { convertToISODate } from "../utils/convertToISODate";
-import { emailObject } from "../email/emailObject";
-import { firstContact } from "../email/firstContact";
-import { firstReminder } from "../email/firstReminder";
-import { lastReminder } from "../email/lastReminder";
 import chalk from "chalk";
 import { addDaysToDate } from "../../addDaysToDate";
+import { emailObject } from "./email/emailObject";
 
 // Initializing a client
 const notion = new Client({
   auth: process.env.NOTION_SECRET_KEY,
 });
 
-export const status = (demandeDevis: IDevisSpecifique) => {
-  // const start = convertToISODate(demandeDevis["Créé le"], "-", "-");
+export const status = (demandeAbandonne: IDemande) => {
+  // const start = convertToISODate(demandeAbandonne["Créé le"], "-", "-");
   const firstContact = convertToISODate(
-    addDaysToDate(demandeDevis["Créé le"], 1),
+    addDaysToDate(demandeAbandonne["Créé le"], 1),
     "/",
     "-"
   );
   const firstReminder = convertToISODate(
-    addDaysToDate(demandeDevis["Créé le"], 8),
+    addDaysToDate(demandeAbandonne["Créé le"], 8),
     "/",
     "-"
   );
   const lastReminder = convertToISODate(
-    addDaysToDate(demandeDevis["Créé le"], 15),
+    addDaysToDate(demandeAbandonne["Créé le"], 15),
     "/",
     "-"
   );
   const inactif = convertToISODate(
-    addDaysToDate(demandeDevis["Créé le"], 22),
+    addDaysToDate(demandeAbandonne["Créé le"], 22),
     "/",
     "-"
   );
@@ -65,16 +62,16 @@ export const status = (demandeDevis: IDevisSpecifique) => {
   return "🎉 Nouveau";
 };
 
-export const addItem = async (demandeDevis: IDevisSpecifique) => {
+export const addItem = async (demandeAbandonne: IDemande) => {
   try {
     await notion.pages.create({
-      parent: { database_id: databaseIdDevisSpecifiques },
+      parent: { database_id: databaseIdDemandesAbandonnees },
       properties: {
         ID: {
           title: [
             {
               text: {
-                content: demandeDevis.ID,
+                content: demandeAbandonne.ID,
               },
             },
           ],
@@ -84,24 +81,26 @@ export const addItem = async (demandeDevis: IDevisSpecifique) => {
             {
               type: "text",
               text: {
-                content: demandeDevis.Nom,
+                content: demandeAbandonne.Nom,
               },
             },
           ],
         },
         Téléphone: {
           phone_number:
-            demandeDevis.Téléphone === "" ? "-" : demandeDevis.Téléphone,
+            demandeAbandonne.Téléphone === ""
+              ? "-"
+              : demandeAbandonne.Téléphone,
         },
         Email: {
-          email: demandeDevis.Email === "" ? "-" : demandeDevis.Email,
+          email: demandeAbandonne.Email === "" ? "-" : demandeAbandonne.Email,
         },
         "Code postal": {
           rich_text: [
             {
               type: "text",
               text: {
-                content: demandeDevis["Code postal"],
+                content: demandeAbandonne["Code postal"],
               },
             },
           ],
@@ -111,32 +110,32 @@ export const addItem = async (demandeDevis: IDevisSpecifique) => {
             {
               type: "text",
               text: {
-                content: demandeDevis.Ville,
+                content: demandeAbandonne.Ville,
               },
             },
           ],
         },
         "Créé le": {
           date: {
-            start: convertToISODate(demandeDevis["Créé le"], "-", "-"),
+            start: convertToISODate(demandeAbandonne["Créé le"], "-", "-"),
           },
         },
         "Type de projet": {
           select: {
-            name: `🏡 ${demandeDevis["Type de projet"]}`,
+            name: `🏡 ${demandeAbandonne["Type de projet"]}`,
           },
         },
         Type: {
           select: {
             name:
-              demandeDevis.Type === "Pro"
-                ? `👷‍♂️ ${demandeDevis.Type}`
-                : `👤 ${demandeDevis.Type}`,
+              demandeAbandonne.Type === "Pro"
+                ? `👷‍♂️ ${demandeAbandonne.Type}`
+                : `👤 ${demandeAbandonne.Type}`,
           },
         },
         Status: {
           select: {
-            name: status(demandeDevis),
+            name: status(demandeAbandonne),
           },
         },
       },
@@ -148,13 +147,13 @@ export const addItem = async (demandeDevis: IDevisSpecifique) => {
               {
                 type: "text",
                 text: {
-                  content: `❓ ${demandeDevis.ID} - ${demandeDevis.Nom} - ${demandeDevis["Type de projet"]} (${demandeDevis["Code postal"]} ${demandeDevis.Ville})`,
+                  content: `❓ ${demandeAbandonne.ID} - ${demandeAbandonne.Nom} - ${demandeAbandonne["Type de projet"]} (${demandeAbandonne["Code postal"]} ${demandeAbandonne.Ville})`,
                   link: {
                     url:
-                      demandeDevis.Type === "Particulier"
-                        ? `https://app.123structure.fr/backoffice/userqcm/show/${demandeDevis.ID}/part`
-                        : demandeDevis.Type === "Pro"
-                        ? `https://app.123structure.fr/backoffice/userqcm/show/${demandeDevis.ID}/pro`
+                      demandeAbandonne.Type === "Particulier"
+                        ? `https://app.123structure.fr/backoffice/userqcm/show/${demandeAbandonne.ID}/part`
+                        : demandeAbandonne.Type === "Pro"
+                        ? `https://app.123structure.fr/backoffice/userqcm/show/${demandeAbandonne.ID}/pro`
                         : "",
                   },
                 },
@@ -186,7 +185,7 @@ export const addItem = async (demandeDevis: IDevisSpecifique) => {
               {
                 type: "text",
                 text: {
-                  content: demandeDevis["Informations complémentaires"],
+                  content: demandeAbandonne["Informations complémentaires"],
                 },
               },
             ],
@@ -244,7 +243,7 @@ export const addItem = async (demandeDevis: IDevisSpecifique) => {
                     {
                       type: "text",
                       text: {
-                        content: `Objet : ${emailObject(demandeDevis)}`,
+                        content: `Objet : ${emailObject(demandeAbandonne)}`,
                       },
                       annotations: {
                         italic: true,
@@ -254,55 +253,55 @@ export const addItem = async (demandeDevis: IDevisSpecifique) => {
                   color: "yellow_background",
                 },
               },
-              {
-                object: "block",
-                toggle: {
-                  rich_text: [
-                    {
-                      type: "text",
-                      text: {
-                        content: "1ère prise de contact (J+1)",
-                      },
-                    },
-                  ],
-                  children: firstContact(demandeDevis),
-                },
-              },
-              {
-                object: "block",
-                toggle: {
-                  rich_text: [
-                    {
-                      type: "text",
-                      text: {
-                        content: "1ère relance (J+7)",
-                      },
-                    },
-                  ],
-                  children: firstReminder(demandeDevis),
-                },
-              },
-              {
-                object: "block",
-                toggle: {
-                  rich_text: [
-                    {
-                      type: "text",
-                      text: {
-                        content: "Dernière relance (J+14)",
-                      },
-                    },
-                  ],
-                  children: lastReminder(demandeDevis),
-                },
-              },
+              // {
+              //   object: "block",
+              //   toggle: {
+              //     rich_text: [
+              //       {
+              //         type: "text",
+              //         text: {
+              //           content: "1ère prise de contact (J+1)",
+              //         },
+              //       },
+              //     ],
+              //     children: firstContact(demandeAbandonne),
+              //   },
+              // },
+              // {
+              //   object: "block",
+              //   toggle: {
+              //     rich_text: [
+              //       {
+              //         type: "text",
+              //         text: {
+              //           content: "1ère relance (J+7)",
+              //         },
+              //       },
+              //     ],
+              //     children: firstReminder(demandeAbandonne),
+              //   },
+              // },
+              // {
+              //   object: "block",
+              //   toggle: {
+              //     rich_text: [
+              //       {
+              //         type: "text",
+              //         text: {
+              //           content: "Dernière relance (J+14)",
+              //         },
+              //       },
+              //     ],
+              //     children: lastReminder(demandeAbandonne),
+              //   },
+              // },
             ],
           },
         },
       ],
     });
     console.log(
-      `❓🎉 New Item (Demande de devis spécifique) : ${demandeDevis.ID}`
+      `🗑️🎉 New Item (Demande de devis abandonnée) : ${demandeAbandonne.ID}`
     );
   } catch (error: any) {
     console.error(chalk.bgRed("Add Item Error :", error.message));

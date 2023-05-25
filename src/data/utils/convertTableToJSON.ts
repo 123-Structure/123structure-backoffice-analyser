@@ -34,7 +34,10 @@ export const convertTableToJSON = async (
 
   const getMoreInformation = async (browser: Browser, data: any[] | null) => {
     // Get more information if "Devis spécifiques"
-    if (urlId === "demandes_devis_specifiques") {
+    if (
+      urlId.includes("demandes_devis_specifiques") ||
+      urlId.includes("demandes_devis_abandonnees")
+    ) {
       if (data) {
         for (const devis of data) {
           try {

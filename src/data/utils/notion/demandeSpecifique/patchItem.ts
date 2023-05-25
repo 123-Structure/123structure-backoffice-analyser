@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { IDevisSpecifique } from "../../../interfaces/IDevisSpeciques";
+import { IDemande } from "../../../interfaces/IDemande";
 import { convertToISODate } from "../utils/convertToISODate";
 import { addDaysToDate } from "../../addDaysToDate";
 
@@ -26,29 +26,26 @@ const updateItem = async (pageId: string, ID: string, value: string) => {
   }
 };
 
-export const patchItem = (
-  demandeDevis: IDevisSpecifique,
-  pages: any[]
-) => {
+export const patchItem = (demandeSpecifique: IDemande, pages: any[]) => {
   pages.forEach((page) => {
-    // const start = convertToISODate(demandeDevis["Créé le"], "-", "-");
+    // const start = convertToISODate(demandeSpecifique["Créé le"], "-", "-");
     const firstContact = convertToISODate(
-      addDaysToDate(demandeDevis["Créé le"], 1),
+      addDaysToDate(demandeSpecifique["Créé le"], 1),
       "/",
       "-"
     );
     const firstReminder = convertToISODate(
-      addDaysToDate(demandeDevis["Créé le"], 8),
+      addDaysToDate(demandeSpecifique["Créé le"], 8),
       "/",
       "-"
     );
     const lastReminder = convertToISODate(
-      addDaysToDate(demandeDevis["Créé le"], 15),
+      addDaysToDate(demandeSpecifique["Créé le"], 15),
       "/",
       "-"
     );
     const inactif = convertToISODate(
-      addDaysToDate(demandeDevis["Créé le"], 22),
+      addDaysToDate(demandeSpecifique["Créé le"], 22),
       "/",
       "-"
     );
@@ -58,7 +55,7 @@ export const patchItem = (
     //   currentDate > new Date(start) &&
     //   currentDate < new Date(firstContact)
     // ) {
-    //   patchItem(exists.ID, demandeDevis.ID, "🎉 Nouveau");
+    //   patchItem(exists.ID, demandeSpecifique.ID, "🎉 Nouveau");
     // }
 
     const status = page.properties.Status.select.name;
@@ -69,7 +66,7 @@ export const patchItem = (
         currentDate < new Date(firstReminder) &&
         status !== "⌛ 1er Contact (J+1)"
       ) {
-        updateItem(page.id, demandeDevis.ID, "⌛ 1er Contact (J+1)");
+        updateItem(page.id, demandeSpecifique.ID, "⌛ 1er Contact (J+1)");
       }
 
       if (
@@ -77,7 +74,7 @@ export const patchItem = (
         currentDate < new Date(lastReminder) &&
         status !== "⌛ 1ère relance (J+7)"
       ) {
-        updateItem(page.id, demandeDevis.ID, "⌛ 1ère relance (J+7)");
+        updateItem(page.id, demandeSpecifique.ID, "⌛ 1ère relance (J+7)");
       }
 
       if (
@@ -85,11 +82,11 @@ export const patchItem = (
         currentDate < new Date(inactif) &&
         status !== "⌛ Dernière relance (J+14)"
       ) {
-        updateItem(page.id, demandeDevis.ID, "⌛ Dernière relance (J+14)");
+        updateItem(page.id, demandeSpecifique.ID, "⌛ Dernière relance (J+14)");
       }
 
       if (currentDate >= new Date(inactif) && status !== "⏸️ Inactif") {
-        updateItem(page.id, demandeDevis.ID, "⏸️ Inactif");
+        updateItem(page.id, demandeSpecifique.ID, "⏸️ Inactif");
       }
     }
   });

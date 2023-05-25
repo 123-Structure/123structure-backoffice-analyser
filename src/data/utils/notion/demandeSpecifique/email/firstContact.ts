@@ -1,14 +1,14 @@
-import { IDevisSpecifique } from "../../../interfaces/IDevisSpeciques";
+import { IDemande } from "../../../../interfaces/IDemande";
 import { BlockObjectRequestWithoutChildren } from "@notionhq/client/build/src/api-endpoints";
 
-const getText = (demandeDevis: IDevisSpecifique) =>
+const getText = (demandeSpecifique: IDemande) =>
   `Bonjour,
 <break>
 L’équipe 123 Structure tient à vous remercier pour votre demande de devis que vous avez réalisée sur notre plateforme de devis en ligne. Nous sommes heureux de vous accompagner dans cette démarche et de vous aider à concrétiser votre projet ${
-    demandeDevis["Type de projet"].includes("Agrandissement") ? "d'" : "de "
-  }${demandeDevis["Type de projet"].toLowerCase()} (${
-    demandeDevis["Code postal"]
-  } - ${demandeDevis.Ville}).
+    demandeSpecifique["Type de projet"].includes("Agrandissement") ? "d'" : "de "
+  }${demandeSpecifique["Type de projet"].toLowerCase()} (${
+    demandeSpecifique["Code postal"]
+  } - ${demandeSpecifique.Ville}).
 <break>
 Afin de pouvoir élaborer un devis personnalisé et répondre au mieux à vos attentes, nous aurions besoin de plus d'informations sur votre projet. Pouvez-vous nous fournir des détails supplémentaires, tels que des plans ou des croquis, qui nous aideront à mieux comprendre la portée du travail à réaliser ?
 <break>
@@ -24,25 +24,25 @@ Pour finir, pouvez-vous nous confirmer et/ou compléter vos informations de cont
 <break>
 Vos références :
 <break>
-${demandeDevis.Nom}
+${demandeSpecifique.Nom}
 <break>
 ${
-  demandeDevis.Téléphone === ""
+  demandeSpecifique.Téléphone === ""
     ? "Téléphone : Non communiqué"
-    : demandeDevis.Téléphone
+    : demandeSpecifique.Téléphone
 }
 <break>
-${demandeDevis.Email}
+${demandeSpecifique.Email}
 <break>
-Lieu de construction : ${demandeDevis["Code postal"]} - ${demandeDevis.Ville}
+Lieu de construction : ${demandeSpecifique["Code postal"]} - ${demandeSpecifique.Ville}
 <break>
-Référence de la demande : ${demandeDevis.ID}
+Référence de la demande : ${demandeSpecifique.ID}
 <break>
 
 <break>
 Nous sommes impatients de travailler avec vous et de réaliser votre projet ${
-    demandeDevis["Type de projet"].includes("Agrandissement") ? "d'" : "de "
-  }${demandeDevis[
+    demandeSpecifique["Type de projet"].includes("Agrandissement") ? "d'" : "de "
+  }${demandeSpecifique[
     "Type de projet"
   ].toLowerCase()}. Merci encore pour votre confiance.
 <break>
@@ -54,9 +54,9 @@ L’équipe 123 Structure
 `;
 
 export const firstContact = (
-  demandeDevis: IDevisSpecifique
+  demandeSpecifique: IDemande
 ): BlockObjectRequestWithoutChildren[] => {
-  const content = getText(demandeDevis);
+  const content = getText(demandeSpecifique);
 
   const blocks = [] as BlockObjectRequestWithoutChildren[];
 

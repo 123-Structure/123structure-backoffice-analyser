@@ -15,7 +15,8 @@ import {
 import { retryDelay } from "./data/utils/retryDelay";
 import { getCurrentTimestamp } from "./data/utils/getCurrentTimestamp";
 import { generateReport } from "./data/utils/generateReport";
-import { devisSpecifiques } from "./data/utils/notion/devisSpecifique";
+import { demandeSpecifique } from "./data/utils/notion/demandeSpecifique";
+import { demandeAbandonne } from "./data/utils/notion/demandeAbandonne";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -35,6 +36,7 @@ async function scrapePages(urls: IUrl[], retries = 0) {
   try {
     browser = await puppeteer.launch({
       args: ["--no-sandbox"],
+      // headless: false,
       headless: "new",
     });
     const page = await browser.newPage();
@@ -58,7 +60,7 @@ async function scrapePages(urls: IUrl[], retries = 0) {
 
     for (let i = 0; i < urls.length; i++) {
       const url = urls[i];
-      console.log(`Navigating to URL: [${url.id}] - ${url.path}`);
+      console.log(`Navigating to URL : [${url.id}] - ${url.path}`);
 
       await page.goto(url.path);
       await page.waitForSelector("#datatable");
@@ -70,7 +72,7 @@ async function scrapePages(urls: IUrl[], retries = 0) {
 
       while (hasNextPage) {
         console.log(
-          `Scraped data from URL: [${url.id} - Page ${pageCounter}] - ${url.path}?page=${pageCounter}`
+          `Scraped data from URL : [${url.id} - Page ${pageCounter}] - ${url.path}?page=${pageCounter}`
         );
         const pageData = await convertTableToJSON(page, browser, url.id);
         data = data.concat(pageData);
@@ -122,29 +124,31 @@ async function scrapePages(urls: IUrl[], retries = 0) {
   }
 }
 
+const launchScraping = async () => {
+  // await scrapePages(scrapedUrl);
+  await demandeSpecifique();
+  // await demandeAbandonne();
+};
+
 // Schedule the script to run periodically
 (async () => {
-  await scrapePages(scrapedUrl);
-  await devisSpecifiques();
+  launchScraping();
 
   if (process.env.APP_MODE === "DEVELOPMENT_15") {
     cron.schedule(cronScheduleEveryFifteenMinutes, async () => {
-      await scrapePages(scrapedUrl);
-      await devisSpecifiques();
+      launchScraping();
     });
   }
 
   if (process.env.APP_MODE === "DEVELOPMENT_30") {
     cron.schedule(cronScheduleEveryThirtyMinutes, async () => {
-      await scrapePages(scrapedUrl);
-      await devisSpecifiques();
+      launchScraping();
     });
   }
 
   if (process.env.APP_MODE === "PRODUCTION") {
     cron.schedule(cronScheduleOnWorkDay, async () => {
-      await scrapePages(scrapedUrl);
-      await devisSpecifiques();
+      launchScraping();
     });
   }
 })();

@@ -31,7 +31,9 @@ export const generateReport = (timestamp: string, url: IUrl, data: any) => {
   }
 
   // Generate JSON file
-  const filename = `${getCurrentTimestampFilename(timestamp)}_${url.id}.json`;
+  const filename = `${getCurrentTimestampFilename(timestamp)}_${url.id.slice(
+    2
+  )}.json`;
   const filePath = path.join(timestampFileFolderPath, filename);
   const fileContent = JSON.stringify(data, null, 2);
 

@@ -3,13 +3,13 @@ import { IUrl } from "../interfaces/IUrl";
 // Define URLs that should be scrapped
 export const scrapedUrl: IUrl[] = [
   {
-    id: "demandes_devis_specifiques",
+    id: "❓ demandes_devis_specifiques",
     path: "https://app.123structure.fr/backoffice/userqcm/index/out",
   },
-  // {
-  //   id: "demandes_devis_abandonnees",
-  //   path: "https://app.123structure.fr/backoffice/userqcm/index/pending",
-  // },
+  {
+    id: "🗑️ demandes_devis_abandonnees",
+    path: "https://app.123structure.fr/backoffice/userqcm/index/pending",
+  },
   // {
   //   id: "devis_sauvegardees",
   //   path: "https://app.123structure.fr/backoffice/quote/index/created",

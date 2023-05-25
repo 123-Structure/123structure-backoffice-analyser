@@ -1,15 +1,15 @@
-import { IDevisSpecifique } from "../../../interfaces/IDevisSpeciques";
+import { IDemande } from "../../../../interfaces/IDemande";
 import { BlockObjectRequestWithoutChildren } from "@notionhq/client/build/src/api-endpoints";
 
-const getText = (demandeDevis: IDevisSpecifique) =>
+const getText = (demandeSpecifique: IDemande) =>
   `Bonjour,
 <break>
 Nous tenons à vous recontacter au sujet de votre demande de devis pour votre projet ${
-    demandeDevis["Type de projet"].includes("Agrandissement") ? "d'" : "de "
-  }${demandeDevis["Type de projet"].toLowerCase()} (${
-    demandeDevis["Code postal"]
+    demandeSpecifique["Type de projet"].includes("Agrandissement") ? "d'" : "de "
+  }${demandeSpecifique["Type de projet"].toLowerCase()} (${
+    demandeSpecifique["Code postal"]
   } - ${
-    demandeDevis.Ville
+    demandeSpecifique.Ville
   }). Sauf erreur de notre part, nous n’avons pas reçu les informations complémentaires sur votre projet ni des plans ou des croquis détaillés.
 <break>
 Afin de pouvoir avancer dans l'élaboration de votre devis et vous proposer une offre précise, il est essentiel pour nous de disposer de ces éléments et de ces informations. Les plans architecturaux, les dimensions et tout autre document technique nous aideront à mieux comprendre vos attentes et à vous présenter une proposition adaptée à votre projet. De plus, vos exigences particulières en matière de matériaux, de finition ou de mode constructif peuvent influer sur notre offre.
@@ -24,19 +24,19 @@ Si vous avez des questions supplémentaires ou si vous avez besoin d'assistance 
 <break>
 Vos références :
 <break>
-${demandeDevis.Nom}
+${demandeSpecifique.Nom}
 <break>
 ${
-  demandeDevis.Téléphone === ""
+  demandeSpecifique.Téléphone === ""
     ? "Téléphone : Non communiqué"
-    : demandeDevis.Téléphone
+    : demandeSpecifique.Téléphone
 }
 <break>
-${demandeDevis.Email}
+${demandeSpecifique.Email}
 <break>
-Lieu de construction : ${demandeDevis["Code postal"]} - ${demandeDevis.Ville}
+Lieu de construction : ${demandeSpecifique["Code postal"]} - ${demandeSpecifique.Ville}
 <break>
-Référence de la demande : ${demandeDevis.ID}
+Référence de la demande : ${demandeSpecifique.ID}
 <break>
 
 <break>
@@ -47,9 +47,9 @@ Bonne journée
 L’équipe 123 Structure`;
 
 export const firstReminder = (
-  demandeDevis: IDevisSpecifique
+  demandeSpecifique: IDemande
 ): BlockObjectRequestWithoutChildren[] => {
-  const content = getText(demandeDevis);
+  const content = getText(demandeSpecifique);
 
   const blocks = [] as BlockObjectRequestWithoutChildren[];
 
