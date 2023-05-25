@@ -9,6 +9,7 @@ import { auth } from "./data/constants/auth";
 import { scrapedUrl } from "./data/constants/scrapedUrl";
 import {
   cronScheduleEveryFifteenMinutes,
+  cronScheduleEveryThirtyMinutes,
   cronScheduleOnWorkDay,
 } from "./data/constants/cronSchedule";
 import { retryDelay } from "./data/utils/retryDelay";
@@ -19,7 +20,7 @@ import { devisSpecifiques } from "./data/utils/notion/devisSpecifique";
 // Load environment variables from .env file
 dotenv.config();
 
-// Define the number of retries and the delay in milliseconds
+// Define the number of retries
 const maxRetries = 3;
 
 async function scrapePages(urls: IUrl[], retries = 0) {
@@ -110,10 +111,10 @@ async function scrapePages(urls: IUrl[], retries = 0) {
           retries + 1
         }/${maxRetries})`
       );
-      await new Promise((resolve) => setTimeout(resolve, retryDelay(0, 0, 10)));
+      await new Promise((resolve) => setTimeout(resolve, retryDelay(0, 0, 5)));
       await scrapePages(urls, retries + 1);
     } else {
-      console.log(chalk.bgRed("Max retries reached. Exiting..."));
+      console.error(chalk.bgRed("Max retries reached. Exiting..."));
       // Forcefully exit the script with a non-zero exit code
       process.exit(1);
     }
@@ -125,8 +126,15 @@ async function scrapePages(urls: IUrl[], retries = 0) {
   await scrapePages(scrapedUrl);
   await devisSpecifiques();
 
-  if (process.env.APP_MODE === "DEVELOPMENT") {
+  if (process.env.APP_MODE === "DEVELOPMENT_15") {
     cron.schedule(cronScheduleEveryFifteenMinutes, async () => {
+      await scrapePages(scrapedUrl);
+      await devisSpecifiques();
+    });
+  }
+
+  if (process.env.APP_MODE === "DEVELOPMENT_30") {
+    cron.schedule(cronScheduleEveryThirtyMinutes, async () => {
       await scrapePages(scrapedUrl);
       await devisSpecifiques();
     });

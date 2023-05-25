@@ -7,7 +7,7 @@ export const checkPageExist = async (
   targetValue: string,
   retries = 0
 ) => {
-  // Define the number of retries and the delay in milliseconds
+  // Define the number of retries
   const maxRetries = 3;
 
   const url = `https://api.notion.com/v1/databases/${databaseId}/query`;
@@ -32,18 +32,22 @@ export const checkPageExist = async (
   });
 
   if (!response.ok) {
-    console.error(chalk.bgRed(`HTTP error! Status : ${response.status}`));
-    
+    console.error(
+      chalk.bgRed(
+        `Page Exist HTTP error! Status : ${response.status} - ${response.statusText}`
+      )
+    );
+
     if (retries < maxRetries) {
       console.log(
         `Retrying after ${retryDelay(0, 0, 5) / 1000} seconds... (${
           retries + 1
         }/${maxRetries})`
       );
-      await new Promise((resolve) => setTimeout(resolve, retryDelay(0, 0, 10)));
+      await new Promise((resolve) => setTimeout(resolve, retryDelay(0, 0, 5)));
       await checkPageExist(databaseId, property, targetValue, retries + 1);
     } else {
-      console.log(chalk.bgRed("Max retries reached. Exiting..."));
+      console.error(chalk.bgRed("Max retries reached. Exiting..."));
       // Forcefully exit the script with a non-zero exit code
       process.exit(1);
     }
@@ -51,5 +55,5 @@ export const checkPageExist = async (
 
   const data = await response.json();
   const pages = data.results;
-  return { test: pages.length > 0, page: pages[0] };
+  return { test: pages.length > 0, pages: pages };
 };

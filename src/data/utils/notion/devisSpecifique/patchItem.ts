@@ -26,66 +26,71 @@ const updateItem = async (pageId: string, ID: string, value: string) => {
   }
 };
 
-export const patchItem = (demandeDevis: IDevisSpecifique, page: any) => {
-  // const start = convertToISODate(demandeDevis["Créé le"], "-", "-");
-  const firstContact = convertToISODate(
-    addDaysToDate(demandeDevis["Créé le"], 1),
-    "/",
-    "-"
-  );
-  const firstReminder = convertToISODate(
-    addDaysToDate(demandeDevis["Créé le"], 8),
-    "/",
-    "-"
-  );
-  const lastReminder = convertToISODate(
-    addDaysToDate(demandeDevis["Créé le"], 15),
-    "/",
-    "-"
-  );
-  const inactif = convertToISODate(
-    addDaysToDate(demandeDevis["Créé le"], 22),
-    "/",
-    "-"
-  );
-  const currentDate = new Date();
+export const patchItem = (
+  demandeDevis: IDevisSpecifique,
+  pages: any[]
+) => {
+  pages.forEach((page) => {
+    // const start = convertToISODate(demandeDevis["Créé le"], "-", "-");
+    const firstContact = convertToISODate(
+      addDaysToDate(demandeDevis["Créé le"], 1),
+      "/",
+      "-"
+    );
+    const firstReminder = convertToISODate(
+      addDaysToDate(demandeDevis["Créé le"], 8),
+      "/",
+      "-"
+    );
+    const lastReminder = convertToISODate(
+      addDaysToDate(demandeDevis["Créé le"], 15),
+      "/",
+      "-"
+    );
+    const inactif = convertToISODate(
+      addDaysToDate(demandeDevis["Créé le"], 22),
+      "/",
+      "-"
+    );
+    const currentDate = new Date();
 
-  // if (
-  //   currentDate > new Date(start) &&
-  //   currentDate < new Date(firstContact)
-  // ) {
-  //   patchItem(exists.ID, demandeDevis.ID, "🎉 Nouveau");
-  // }
+    // if (
+    //   currentDate > new Date(start) &&
+    //   currentDate < new Date(firstContact)
+    // ) {
+    //   patchItem(exists.ID, demandeDevis.ID, "🎉 Nouveau");
+    // }
 
-  const status = page.properties.Status.select.name;
+    const status = page.properties.Status.select.name;
 
-  if (status !== "✅ Terminé" && status !== "🗃️ Archivé") {
-    if (
-      currentDate >= new Date(firstContact) &&
-      currentDate < new Date(firstReminder) &&
-      status !== "⌛ 1er Contact (J+1)"
-    ) {
-      updateItem(page.id, demandeDevis.ID, "⌛ 1er Contact (J+1)");
+    if (status !== "✅ Terminé" && status !== "🗃️ Archivé") {
+      if (
+        currentDate >= new Date(firstContact) &&
+        currentDate < new Date(firstReminder) &&
+        status !== "⌛ 1er Contact (J+1)"
+      ) {
+        updateItem(page.id, demandeDevis.ID, "⌛ 1er Contact (J+1)");
+      }
+
+      if (
+        currentDate >= new Date(firstReminder) &&
+        currentDate < new Date(lastReminder) &&
+        status !== "⌛ 1ère relance (J+7)"
+      ) {
+        updateItem(page.id, demandeDevis.ID, "⌛ 1ère relance (J+7)");
+      }
+
+      if (
+        currentDate >= new Date(lastReminder) &&
+        currentDate < new Date(inactif) &&
+        status !== "⌛ Dernière relance (J+14)"
+      ) {
+        updateItem(page.id, demandeDevis.ID, "⌛ Dernière relance (J+14)");
+      }
+
+      if (currentDate >= new Date(inactif) && status !== "⏸️ Inactif") {
+        updateItem(page.id, demandeDevis.ID, "⏸️ Inactif");
+      }
     }
-
-    if (
-      currentDate >= new Date(firstReminder) &&
-      currentDate < new Date(lastReminder) &&
-      status !== "⌛ 1ère relance (J+7)"
-    ) {
-      updateItem(page.id, demandeDevis.ID, "⌛ 1ère relance (J+7)");
-    }
-
-    if (
-      currentDate >= new Date(lastReminder) &&
-      currentDate < new Date(inactif) &&
-      status !== "⌛ Dernière relance (J+14)"
-    ) {
-      updateItem(page.id, demandeDevis.ID, "⌛ Dernière relance (J+14)");
-    }
-
-    if (currentDate >= new Date(inactif) && status !== "⏸️ Inactif") {
-      updateItem(page.id, demandeDevis.ID, "⏸️ Inactif");
-    }
-  }
+  });
 };

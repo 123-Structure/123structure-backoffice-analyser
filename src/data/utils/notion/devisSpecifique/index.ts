@@ -6,9 +6,14 @@ import { checkPageExist } from "../utils/checkPageExist";
 import { databaseIdDevisSpecifiques } from "../../../constants/notionDatabaseID";
 import chalk from "chalk";
 import { patchItem } from "./patchItem";
+import { getCurrentTimestamp } from "../../getCurrentTimestamp";
 
 export const devisSpecifiques = async () => {
-  console.log(chalk.bgCyan("📖 Reading 'Demande de devis spécifique'..."));
+  const timestamp = getCurrentTimestamp();
+
+  console.log(
+    chalk.bgCyan(`📖 Reading 'Demande de devis spécifique' at ${timestamp}...`)
+  );
 
   const filePath = getLastModifiedFilePath("demandes_devis_specifiques");
 
@@ -27,11 +32,11 @@ export const devisSpecifiques = async () => {
           if (!exists.test) {
             addItem(demandeDevis);
           } else {
-            patchItem(demandeDevis, exists.page);
+            patchItem(demandeDevis, exists.pages);
           }
         })
         .catch((error) => {
-          console.error("Page Exist Error :", error.message);
+          console.error(chalk.bgRed("Page Exist Error :", error.message));
         });
     });
   });
