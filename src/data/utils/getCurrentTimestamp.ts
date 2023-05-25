@@ -1,4 +1,5 @@
 export const getCurrentTimestamp = (): string => {
   const now = new Date();
-  return now.toLocaleString("fr-FR");
+  const options = { timeZone: "Europe/Paris" }; // Set the desired time zone
+  return now.toLocaleString("fr-FR", options);
 };

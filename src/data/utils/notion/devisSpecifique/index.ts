@@ -36,7 +36,7 @@ export const devisSpecifiques = async () => {
           }
         })
         .catch((error) => {
-          console.error(chalk.bgRed("Page Exist Error :", error.message));
+          console.error(chalk.bgRed("Page Exist Error :", error));
         });
     });
   });

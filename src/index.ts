@@ -34,6 +34,7 @@ async function scrapePages(urls: IUrl[], retries = 0) {
 
   try {
     browser = await puppeteer.launch({
+      args: ["--no-sandbox"],
       headless: "new",
     });
     const page = await browser.newPage();
