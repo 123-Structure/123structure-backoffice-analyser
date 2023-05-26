@@ -1,4 +1,3 @@
-const { Client } = require("@notionhq/client");
 import chalk from "chalk";
 
 export const checkPageExist = async (
@@ -7,9 +6,6 @@ export const checkPageExist = async (
   targetValue: string,
   retries = 0
 ) => {
-  // Define the number of retries
-  const maxRetries = 3;
-
   // URL and authentication
   const url = `https://api.notion.com/v1/databases/${databaseId}/query`;
   const apiKey = process.env.NOTION_SECRET_KEY;

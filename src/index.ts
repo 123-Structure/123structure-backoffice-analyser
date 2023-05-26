@@ -17,12 +17,10 @@ import { getCurrentTimestamp } from "./data/utils/getCurrentTimestamp";
 import { generateReport } from "./data/utils/generateReport";
 import { demandeSpecifique } from "./data/utils/notion/demandeSpecifique";
 import { demandeAbandonne } from "./data/utils/notion/demandeAbandonne";
+import { maxRetries } from "./data/constants/maxRetries";
 
 // Load environment variables from .env file
 dotenv.config();
-
-// Define the number of retries
-const maxRetries = 3;
 
 async function scrapePages(urls: IUrl[], retries = 0) {
   const timestamp = getCurrentTimestamp();

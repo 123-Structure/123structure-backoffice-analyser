@@ -5,6 +5,8 @@ import { convertToISODate } from "../utils/convertToISODate";
 import chalk from "chalk";
 import { addDaysToDate } from "../../addDaysToDate";
 import { emailObject } from "./email/emailObject";
+import { retryDelay } from "../../retryDelay";
+import { maxRetries } from "../../../constants/maxRetries";
 
 // Initializing a client
 const notion = new Client({
@@ -62,7 +64,7 @@ export const status = (demandeAbandonne: IDemande) => {
   return "🎉 Nouveau";
 };
 
-export const addItem = async (demandeAbandonne: IDemande) => {
+export const addItem = async (demandeAbandonne: IDemande, retries = 0) => {
   try {
     await notion.pages.create({
       parent: { database_id: databaseIdDemandesAbandonnees },
@@ -305,5 +307,19 @@ export const addItem = async (demandeAbandonne: IDemande) => {
     );
   } catch (error: any) {
     console.error(chalk.bgRed("Add Item Error :", error.message));
+
+    if (retries < maxRetries) {
+      console.log(
+        `Retrying after ${retryDelay(0, 0, 5) / 1000} seconds... (${
+          retries + 1
+        }/${maxRetries})`
+      );
+      await new Promise((resolve) => setTimeout(resolve, retryDelay(0, 0, 5)));
+      await addItem(demandeAbandonne, retries + 1);
+    } else {
+      console.error(chalk.bgRed("Max retries reached. Exiting..."));
+      // Forcefully exit the script with a non-zero exit code
+      process.exit(1);
+    }
   }
 };
