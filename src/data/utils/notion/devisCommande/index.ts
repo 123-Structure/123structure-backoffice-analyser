@@ -1,23 +1,21 @@
 import fs from "fs";
-import { IDemande } from "../../../interfaces/IDemande";
 import { addItem } from "./addItem";
-import { patchItem } from "./patchItem";
+// import { patchItem } from "./patchItem";
 import { getLastModifiedFilePath } from "../../getLastModifiedFilePath";
 import { checkPageExist } from "../utils/checkPageExist";
-import { databaseIdDemandesSpecifiques } from "../../../constants/notionDatabaseID";
+import { databaseIdDevisCommandes } from "../../../constants/notionDatabaseID";
 import chalk from "chalk";
 import { getCurrentTimestamp } from "../../getCurrentTimestamp";
+import { IDevisCommande } from "../../../interfaces/IDevisCommande";
 
-export const demandeSpecifique = async () => {
+export const devisSauvegardes = async () => {
   const timestamp = getCurrentTimestamp();
 
   console.log(
-    chalk.bgCyan(
-      `❓📖 Reading 'Demande de devis spécifique' at ${timestamp}...`
-    )
+    chalk.bgCyan(`🏡📖 Reading 'Devis sauvegardés' at ${timestamp}...`)
   );
 
-  const filePath = getLastModifiedFilePath("demandes_devis_specifiques");
+  const filePath = getLastModifiedFilePath("devis_sauvegardes");
 
   fs.readFile(filePath, "utf-8", (err, jsonData) => {
     if (err) {
@@ -27,15 +25,16 @@ export const demandeSpecifique = async () => {
 
     const data = JSON.parse(jsonData);
 
-    data.forEach((demandeSpecifique: IDemande) => {
+    data.forEach((devisCommande: IDevisCommande) => {
       // Perform operations with each item in the JSON data
-      checkPageExist(databaseIdDemandesSpecifiques, "ID", demandeSpecifique.ID)
+      checkPageExist(databaseIdDevisCommandes, "Devis", devisCommande.Numéro)
         .then((exists) => {
           if (exists !== undefined) {
+            console.log(exists);
             if (!exists.test) {
-              addItem(demandeSpecifique);
+              addItem(devisCommande);
             } else {
-              patchItem(demandeSpecifique, exists.pages);
+              // patchItem(demandeSpecifique, exists.pages);
             }
           }
         })

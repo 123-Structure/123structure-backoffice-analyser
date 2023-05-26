@@ -1,4 +1,5 @@
 import { Browser, Page } from "puppeteer";
+import { extractID } from "./notion/utils/extractID";
 
 export const convertTableToJSON = async (
   page: Page,
@@ -33,24 +34,24 @@ export const convertTableToJSON = async (
   });
 
   const getMoreInformation = async (browser: Browser, data: any[] | null) => {
-    // Get more information if "Devis spécifiques"
+    // Get more information
     if (
       urlId.includes("demandes_devis_specifiques") ||
       urlId.includes("demandes_devis_abandonnees")
     ) {
       if (data) {
-        for (const devis of data) {
+        for (const demande of data) {
           try {
             const page = await browser.newPage();
 
-            if (devis["Type"] === "Particulier") {
+            if (demande["Type"] === "Particulier") {
               await page.goto(
-                `https://app.123structure.fr/backoffice/userqcm/show/${devis["ID"]}/part`
+                `https://app.123structure.fr/backoffice/userqcm/show/${demande["ID"]}/part`
               );
             }
-            if (devis["Type"] === "Pro") {
+            if (demande["Type"] === "Pro") {
               await page.goto(
-                `https://app.123structure.fr/backoffice/userqcm/show/${devis["ID"]}/pro`
+                `https://app.123structure.fr/backoffice/userqcm/show/${demande["ID"]}/pro`
               );
             }
 
@@ -112,16 +113,87 @@ export const convertTableToJSON = async (
               }
             });
 
-            devis["Téléphone"] = coord?.phone;
-            devis["Email"] = coord?.email;
-            devis["Type de projet"] = type?.projectType;
-            devis["Informations complémentaires"] =
+            demande["Téléphone"] = coord?.phone;
+            demande["Email"] = coord?.email;
+            demande["Type de projet"] = type?.projectType;
+            demande["Informations complémentaires"] =
               additionalInformation?.information;
 
             await page.close();
           } catch (error) {
             console.error(`Navigation failed: ${error}`);
           }
+        }
+      }
+    }
+    if (urlId.includes("devis_sauvegardes")) {
+      if (data) {
+        for (const devis of data) {
+          try {
+            const page = await browser.newPage();
+
+            await page.goto(
+              `https://app.123structure.fr/backoffice/quote/${extractID(
+                devis["Numéro"]
+              )}/edit`
+            );
+
+            const phoneNumber = await page.evaluate(() => {
+              const phoneNumberInput = document.querySelectorAll("#phone");
+              const phoneNumberArray = [] as string[];
+              if (phoneNumberInput) {
+                phoneNumberInput.forEach((phone) => {
+                  const input = phone as HTMLInputElement;
+                  phoneNumberArray.push(input.value);
+                });
+                return {
+                  phone: [
+                    ...new Set(
+                      phoneNumberArray.filter((phone) => phone !== "")
+                    ),
+                  ],
+                };
+              } else {
+                return null;
+              }
+            });
+
+            const emailList = await page.evaluate(() => {
+              const emailInput = document.querySelectorAll("#email");
+              const emailArray = [] as string[];
+              if (emailInput) {
+                emailInput.forEach((email) => {
+                  const input = email as HTMLInputElement;
+                  emailArray.push(input.value);
+                });
+                return {
+                  email: [
+                    ...new Set(emailArray.filter((email) => email !== "")),
+                  ],
+                };
+              } else {
+                return null;
+              }
+            });
+
+            const uniqueLink = await page.evaluate(() => {
+              const uniqueLinkButton = document.querySelector(
+                "#layout-wrapper > div.main-content > div > div > div.row.qcm > div.col-12.col-md-4 > div > div > a"
+              ) as HTMLAnchorElement;
+              if (uniqueLinkButton) {
+                const link = uniqueLinkButton.href;
+                return {
+                  link,
+                };
+              } else {
+                return null;
+              }
+            });
+
+            devis["Téléphone"] = phoneNumber?.phone;
+            devis["Email"] = emailList?.email;
+            devis["Lien unique"] = uniqueLink?.link;
+          } catch (error) {}
         }
       }
     }

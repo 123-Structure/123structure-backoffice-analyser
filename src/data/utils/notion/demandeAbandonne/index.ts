@@ -1,11 +1,11 @@
 import fs from "fs";
 import { IDemande } from "../../../interfaces/IDemande";
 import { addItem } from "./addItem";
+import { patchItem } from "./patchItem";
 import { getLastModifiedFilePath } from "../../getLastModifiedFilePath";
 import { checkPageExist } from "../utils/checkPageExist";
 import { databaseIdDemandesAbandonnees } from "../../../constants/notionDatabaseID";
 import chalk from "chalk";
-import { patchItem } from "./patchItem";
 import { getCurrentTimestamp } from "../../getCurrentTimestamp";
 
 export const demandeAbandonne = async () => {

@@ -18,6 +18,7 @@ import { generateReport } from "./data/utils/generateReport";
 import { demandeSpecifique } from "./data/utils/notion/demandeSpecifique";
 import { demandeAbandonne } from "./data/utils/notion/demandeAbandonne";
 import { maxRetries } from "./data/constants/maxRetries";
+import { devisSauvegardes } from "./data/utils/notion/devisCommande";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -83,9 +84,9 @@ async function scrapePages(urls: IUrl[], retries = 0) {
         if (!nextPageAnchor) {
           hasNextPage = false;
         } else {
-          // //
-          // hasNextPage = false;
-          // //
+          //
+          hasNextPage = false;
+          //
           pageCounter++;
           const nextPageUrl = `${url.path}?page=${pageCounter}`;
           await page.goto(nextPageUrl);
@@ -123,30 +124,31 @@ async function scrapePages(urls: IUrl[], retries = 0) {
 }
 
 const launchScraping = async () => {
-  await scrapePages(scrapedUrl);
-  await demandeSpecifique();
-  await demandeAbandonne();
+  // await scrapePages(scrapedUrl);
+  // await demandeSpecifique();
+  // await demandeAbandonne();
+  await devisSauvegardes();
 };
 
 // Schedule the script to run periodically
 (async () => {
   launchScraping();
 
-  if (process.env.APP_MODE === "DEVELOPMENT_15") {
-    cron.schedule(cronScheduleEveryFifteenMinutes, async () => {
-      launchScraping();
-    });
-  }
+  // if (process.env.APP_MODE === "DEVELOPMENT_15") {
+  //   cron.schedule(cronScheduleEveryFifteenMinutes, async () => {
+  //     launchScraping();
+  //   });
+  // }
 
-  if (process.env.APP_MODE === "DEVELOPMENT_30") {
-    cron.schedule(cronScheduleEveryThirtyMinutes, async () => {
-      launchScraping();
-    });
-  }
+  // if (process.env.APP_MODE === "DEVELOPMENT_30") {
+  //   cron.schedule(cronScheduleEveryThirtyMinutes, async () => {
+  //     launchScraping();
+  //   });
+  // }
 
-  if (process.env.APP_MODE === "PRODUCTION") {
-    cron.schedule(cronScheduleOnWorkDay, async () => {
-      launchScraping();
-    });
-  }
+  // if (process.env.APP_MODE === "PRODUCTION") {
+  //   cron.schedule(cronScheduleOnWorkDay, async () => {
+  //     launchScraping();
+  //   });
+  // }
 })();

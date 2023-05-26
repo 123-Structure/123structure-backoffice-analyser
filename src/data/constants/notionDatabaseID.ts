@@ -1,5 +1,8 @@
 export const databaseIdDemandesSpecifiques = process.env
   .NOTION_DATABASE_ID_DEMANDES_SPECIFIQUES as string;
 
-  export const databaseIdDemandesAbandonnees = process.env
+export const databaseIdDemandesAbandonnees = process.env
   .NOTION_DATABASE_ID_DEMANDES_ABANDONNES as string;
+
+export const databaseIdDevisCommandes = process.env
+  .NOTION_DATABASE_ID_DEVIS_COMMANDES as string;
