@@ -6,6 +6,7 @@ export const checkPageExist = async (
   targetValue: string,
   retries = 0
 ) => {
+
   // URL and authentication
   const url = `https://api.notion.com/v1/databases/${databaseId}/query`;
   const apiKey = process.env.NOTION_SECRET_KEY;
@@ -35,6 +36,7 @@ export const checkPageExist = async (
       body,
       headers,
     });
+
 
     // Handle HTTP errors
     if (!response.ok) {

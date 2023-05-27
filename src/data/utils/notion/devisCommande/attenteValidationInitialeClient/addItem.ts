@@ -5,7 +5,6 @@ import chalk from "chalk";
 import { retryDelay } from "../../../retryDelay";
 import { maxRetries } from "../../../../constants/maxRetries";
 import { IDevisCommande } from "../../../../interfaces/IDevisCommande";
-import { emailObject } from "./email/emailObject";
 import { extractID } from "../../utils/extractID";
 
 // Initializing a client
@@ -13,7 +12,7 @@ const notion = new Client({
   auth: process.env.NOTION_SECRET_KEY,
 });
 
-export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
+export const addItem = async (commande: IDevisCommande, retries = 0) => {
   try {
     await notion.pages.create({
       parent: { database_id: databaseIdDevisCommandes },
@@ -22,7 +21,7 @@ export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
           title: [
             {
               text: {
-                content: devisSauvegarde.Numéro,
+                content: commande.Devis,
               },
             },
           ],
@@ -32,7 +31,7 @@ export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
             {
               type: "text",
               text: {
-                content: "-",
+                content: commande.Numéro,
               },
             },
           ],
@@ -42,61 +41,58 @@ export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
             {
               type: "text",
               text: {
-                content: devisSauvegarde["Adresse de chantier"].split("\n")[0],
+                content: commande["Adresse de chantier"].split("\n")[0],
               },
             },
           ],
         },
         "Téléphone 1": {
           phone_number:
-            devisSauvegarde.Téléphone[0] === undefined ||
-            devisSauvegarde.Téléphone[0] === ""
+            commande.Téléphone[0] === undefined || commande.Téléphone[0] === ""
               ? "-"
-              : devisSauvegarde.Téléphone[0],
+              : commande.Téléphone[0],
         },
         "Téléphone 2": {
           phone_number:
-            devisSauvegarde.Téléphone[1] === undefined ||
-            devisSauvegarde.Téléphone[1] === ""
+            commande.Téléphone[1] === undefined || commande.Téléphone[1] === ""
               ? "-"
-              : devisSauvegarde.Téléphone[1],
+              : commande.Téléphone[1],
         },
         "Téléphone 3": {
           phone_number:
-            devisSauvegarde.Téléphone[2] === undefined ||
-            devisSauvegarde.Téléphone[2] === ""
+            commande.Téléphone[2] === undefined || commande.Téléphone[2] === ""
               ? "-"
-              : devisSauvegarde.Téléphone[2],
+              : commande.Téléphone[2],
         },
         "Email 1": {
           email:
-            devisSauvegarde.Email[0] === undefined ||
-            devisSauvegarde.Email[0] === ""
+            commande.Email[0] === undefined || commande.Email[0] === ""
               ? "-"
-              : devisSauvegarde.Email[0],
+              : commande.Email[0],
         },
         "Email 2": {
           email:
-            devisSauvegarde.Email[1] === undefined ||
-            devisSauvegarde.Email[1] === ""
+            commande.Email[1] === undefined || commande.Email[1] === ""
               ? "-"
-              : devisSauvegarde.Email[1],
+              : commande.Email[1],
         },
         "Email 3": {
           email:
-            devisSauvegarde.Email[2] === undefined ||
-            devisSauvegarde.Email[2] === ""
+            commande.Email[2] === undefined || commande.Email[2] === ""
               ? "-"
-              : devisSauvegarde.Email[2],
+              : commande.Email[2],
         },
         "Code postal": {
           rich_text: [
             {
               type: "text",
               text: {
-                content: devisSauvegarde["Adresse de chantier"]
-                  .split("\n")[2]
-                  .slice(0, 5),
+                content:
+                  commande["Adresse de chantier"].split("\n").length === 3
+                    ? commande["Adresse de chantier"].split("\n")[2].slice(0, 5)
+                    : commande["Adresse de chantier"]
+                        .split("\n")[1]
+                        .slice(0, 5),
               },
             },
           ],
@@ -106,20 +102,21 @@ export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
             {
               type: "text",
               text: {
-                content: devisSauvegarde["Adresse de chantier"]
-                  .split("\n")[2]
-                  .substring(6),
+                content:
+                  commande["Adresse de chantier"].split("\n").length === 3
+                    ? commande["Adresse de chantier"]
+                        .split("\n")[2]
+                        .substring(7)
+                    : commande["Adresse de chantier"]
+                        .split("\n")[1]
+                        .substring(6),
               },
             },
           ],
         },
         "Créé le": {
           date: {
-            start: convertToISODate(
-              devisSauvegarde["Date de création"],
-              "-",
-              "-"
-            ),
+            start: convertToISODate(commande["Date de création"], "-", "-"),
           },
         },
         "Type de projet": {
@@ -130,14 +127,14 @@ export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
         Type: {
           select: {
             name:
-              devisSauvegarde.Type === "Pro"
-                ? `👷‍♂️ ${devisSauvegarde.Type}`
-                : `👤 ${devisSauvegarde.Type}`,
+              commande.Type === "Pro"
+                ? `👷‍♂️ ${commande.Type}`
+                : `👤 ${commande.Type}`,
           },
         },
         Status: {
           select: {
-            name: "💾 Devis sauvegardé",
+            name: "✅ 01 - Attente de validation initial du client",
           },
         },
       },
@@ -150,17 +147,27 @@ export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
                 type: "text",
                 text: {
                   content: `📝 Administration : ${
-                    devisSauvegarde["Adresse de chantier"].split("\n")[0]
-                  } - Construction neuve (${devisSauvegarde[
-                    "Adresse de chantier"
-                  ]
-                    .split("\n")[2]
-                    .slice(0, 5)} ${devisSauvegarde["Adresse de chantier"]
-                    .split("\n")[2]
-                    .substring(7)})`,
+                    commande["Adresse de chantier"].split("\n")[0]
+                  } - Construction neuve (${
+                    commande["Adresse de chantier"].split("\n").length === 3
+                      ? commande["Adresse de chantier"]
+                          .split("\n")[2]
+                          .slice(0, 5)
+                      : commande["Adresse de chantier"]
+                          .split("\n")[1]
+                          .slice(0, 5)
+                  } ${
+                    commande["Adresse de chantier"].split("\n").length === 3
+                      ? commande["Adresse de chantier"]
+                          .split("\n")[2]
+                          .substring(7)
+                      : commande["Adresse de chantier"]
+                          .split("\n")[1]
+                          .substring(7)
+                  })`,
                   link: {
-                    url: `https://app.123structure.fr/backoffice/quote/${extractID(
-                      devisSauvegarde["Numéro"]
+                    url: `https://app.123structure.fr/backoffice/order/${extractID(
+                      commande["Numéro"]
                     )}/edit`,
                   },
                 },
@@ -180,16 +187,26 @@ export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
                 type: "text",
                 text: {
                   content: `🔗 Lien unique : ${
-                    devisSauvegarde["Adresse de chantier"].split("\n")[0]
-                  } - Construction neuve (${devisSauvegarde[
-                    "Adresse de chantier"
-                  ]
-                    .split("\n")[2]
-                    .slice(0, 5)} ${devisSauvegarde["Adresse de chantier"]
-                    .split("\n")[2]
-                    .substring(7)})`,
+                    commande["Adresse de chantier"].split("\n")[0]
+                  } - Construction neuve (${
+                    commande["Adresse de chantier"].split("\n").length === 3
+                      ? commande["Adresse de chantier"]
+                          .split("\n")[2]
+                          .slice(0, 5)
+                      : commande["Adresse de chantier"]
+                          .split("\n")[1]
+                          .slice(0, 5)
+                  } ${
+                    commande["Adresse de chantier"].split("\n").length === 3
+                      ? commande["Adresse de chantier"]
+                          .split("\n")[2]
+                          .substring(7)
+                      : commande["Adresse de chantier"]
+                          .split("\n")[1]
+                          .substring(7)
+                  })`,
                   link: {
-                    url: devisSauvegarde["Lien unique"],
+                    url: commande["Lien unique"],
                   },
                 },
                 annotations: {
@@ -244,30 +261,14 @@ export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
                 },
               },
             ],
-            children: [
-              {
-                object: "block",
-                paragraph: {
-                  rich_text: [
-                    {
-                      type: "text",
-                      text: {
-                        content: `Objet : ${emailObject(devisSauvegarde)}`,
-                      },
-                      annotations: {
-                        italic: true,
-                      },
-                    },
-                  ],
-                  color: "yellow_background",
-                },
-              },
-            ],
+            children: [],
           },
         },
       ],
     });
-    console.log(`💾🎉 New Item (Devis sauvegardé) : ${devisSauvegarde.Numéro}`);
+    console.log(
+      `✅🎉 New Item (Attente de validation initial du client) : ${commande.Numéro}`
+    );
   } catch (error: any) {
     console.error(chalk.bgRed("Add Item Error :", error.message));
 
@@ -278,7 +279,7 @@ export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
         }/${maxRetries})`
       );
       await new Promise((resolve) => setTimeout(resolve, retryDelay(0, 0, 5)));
-      await addItem(devisSauvegarde, retries + 1);
+      await addItem(commande, retries + 1);
     } else {
       console.error(chalk.bgRed("Max retries reached. Exiting..."));
       // Forcefully exit the script with a non-zero exit code

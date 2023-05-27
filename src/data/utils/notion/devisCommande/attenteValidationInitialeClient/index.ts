@@ -1,5 +1,6 @@
 import fs from "fs";
 import { addItem } from "./addItem";
+import { patchItem } from "./patchItem";
 import { getLastModifiedFilePath } from "../../../getLastModifiedFilePath";
 import { checkPageExist } from "../../utils/checkPageExist";
 import { databaseIdDevisCommandes } from "../../../../constants/notionDatabaseID";
@@ -7,19 +8,26 @@ import chalk from "chalk";
 import { getCurrentTimestamp } from "../../../getCurrentTimestamp";
 import { IDevisCommande } from "../../../../interfaces/IDevisCommande";
 
-export const devisSauvegardes = async () => {
+export const attenteValidationInitialeClient = async () => {
   const timestamp = getCurrentTimestamp();
 
   console.log(
-    chalk.bgCyan(`💾📖 Reading 'Devis sauvegardés' at ${timestamp}...`)
+    chalk.bgCyan(
+      `✅📖 Reading 'Attente de validation initial du client' at ${timestamp}...`
+    )
   );
 
-  const filePath = getLastModifiedFilePath("devis_sauvegardes");
+  const filePath = getLastModifiedFilePath(
+    "commandes_01-attente-validation-initiale-client"
+  );
 
   fs.readFile(filePath, "utf-8", (err, jsonData) => {
     if (err) {
       console.error(
-        chalk.bgRed("Error reading JSON file ('Devis sauvegardés') :", err)
+        chalk.bgRed(
+          "Error reading JSON file ('Attente de validation initial du client') :",
+          err
+        )
       );
       return;
     }
@@ -28,11 +36,13 @@ export const devisSauvegardes = async () => {
 
     data.forEach((devisSauvegarde: IDevisCommande) => {
       // Perform operations with each item in the JSON data
-      checkPageExist(databaseIdDevisCommandes, "Devis", devisSauvegarde.Numéro)
+      checkPageExist(databaseIdDevisCommandes, "Devis", devisSauvegarde.Devis)
         .then((exists) => {
           if (exists !== undefined) {
             if (!exists.test) {
               addItem(devisSauvegarde);
+            } else {
+              patchItem(devisSauvegarde, exists.pages);
             }
           }
         })
@@ -42,3 +52,4 @@ export const devisSauvegardes = async () => {
     });
   });
 };
+;

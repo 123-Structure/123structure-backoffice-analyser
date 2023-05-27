@@ -1,6 +1,6 @@
 export const extractID = (code: string): number => {
   // Match the code pattern using a regular expression
-  const match = code.match(/D\d{2}(\d+)/);
+  const match = code.match(/[DC]\d{2}(\d+)/);
 
   // If a match is found
   if (match) {

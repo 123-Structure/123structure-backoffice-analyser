@@ -21,7 +21,12 @@ export const demandeSpecifique = async () => {
 
   fs.readFile(filePath, "utf-8", (err, jsonData) => {
     if (err) {
-      console.error(chalk.bgRed("Error reading JSON file:", err));
+      console.error(
+        chalk.bgRed(
+          "Error reading JSON file ('Demande de devis spécifique') :",
+          err
+        )
+      );
       return;
     }
 

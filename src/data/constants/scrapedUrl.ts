@@ -18,10 +18,10 @@ export const scrapedUrl: IUrl[] = [
   //   id: "devis_annules-expires",
   //   path: "https://app.123structure.fr/backoffice/quote/index/cancelled",
   // },
-  // {
-  //   id: "commandes_01-attente-validation-initiale-client",
-  //   path: "https://app.123structure.fr/backoffice/order/index/created",
-  // },
+  {
+    id: "✅ commandes_01-attente-validation-initiale-client",
+    path: "https://app.123structure.fr/backoffice/order/index/created",
+  },
   // {
   //   id: "commandes_02-attente-paiement-initiale",
   //   path: "https://app.123structure.fr/backoffice/order/index/completed",

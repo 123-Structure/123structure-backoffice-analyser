@@ -1,5 +1,6 @@
 import { Browser, Page } from "puppeteer";
 import { extractID } from "./notion/utils/extractID";
+import chalk from "chalk";
 
 export const convertTableToJSON = async (
   page: Page,
@@ -126,18 +127,87 @@ export const convertTableToJSON = async (
         }
       }
     }
-    if (urlId.includes("devis_sauvegardes")) {
+    if (
+      urlId.includes("devis_sauvegardes") ||
+      urlId.includes("commandes_01-attente-validation-initiale-client")
+    ) {
       if (data) {
         for (const devis of data) {
           try {
             const page = await browser.newPage();
 
-            await page.goto(
-              `https://app.123structure.fr/backoffice/quote/${extractID(
-                devis["Numéro"]
-              )}/edit`
-            );
+            if (urlId.includes("devis_sauvegardes")) {
+              await page.goto(
+                `https://app.123structure.fr/backoffice/quote/${extractID(
+                  devis["Numéro"]
+                )}/edit`
+              );
 
+              const uniqueLink = await page.evaluate(() => {
+                const uniqueLinkButton = document.querySelector(
+                  "#layout-wrapper > div.main-content > div > div > div.row.qcm > div.col-12.col-md-4 > div > div > a"
+                ) as HTMLAnchorElement;
+                if (uniqueLinkButton) {
+                  const link = uniqueLinkButton.href;
+                  return {
+                    link,
+                  };
+                } else {
+                  return null;
+                }
+              });
+
+              devis["Lien unique"] = uniqueLink?.link;
+            }
+
+            if (
+              urlId.includes("commandes_01-attente-validation-initiale-client")
+            ) {
+              await page.goto(
+                `https://app.123structure.fr/backoffice/order/${extractID(
+                  devis["Numéro"]
+                )}/edit`
+              );
+
+              const devisNumber = await page.evaluate(() => {
+                const devisNumberInput =
+                  document.querySelectorAll<HTMLDivElement>(".listing-entry");
+                let devis = "";
+                devisNumberInput.forEach((div) => {
+                  Array.from(div.children).forEach((child) => {
+                    if (child instanceof HTMLElement) {
+                      const innerHTML = child.innerHTML;
+                      if (innerHTML.includes("Devis")) {
+                        const ID = innerHTML.trim().replace("Devis : ", "");
+                        devis = ID;
+                      }
+                    }
+                  });
+                });
+                if (devis !== "") {
+                  return { ID: devis };
+                } else {
+                  return { ID: "-" };
+                }
+              });
+
+              const uniqueLink = await page.evaluate(() => {
+                const uniqueLinkButton = document.querySelector(
+                  "#mainForm > div > div:nth-child(1) > div > div:nth-child(1) > div > div > a:nth-child(2)"
+                ) as HTMLAnchorElement;
+                if (uniqueLinkButton) {
+                  const link = uniqueLinkButton.href;
+                  return {
+                    link,
+                  };
+                } else {
+                  return null;
+                }
+              });
+
+              devis["Lien unique"] = uniqueLink?.link;
+              devis["Devis"] = devisNumber?.ID;
+            }
             const phoneNumber = await page.evaluate(() => {
               const phoneNumberInput = document.querySelectorAll("#phone");
               const phoneNumberArray = [] as string[];
@@ -176,24 +246,11 @@ export const convertTableToJSON = async (
               }
             });
 
-            const uniqueLink = await page.evaluate(() => {
-              const uniqueLinkButton = document.querySelector(
-                "#layout-wrapper > div.main-content > div > div > div.row.qcm > div.col-12.col-md-4 > div > div > a"
-              ) as HTMLAnchorElement;
-              if (uniqueLinkButton) {
-                const link = uniqueLinkButton.href;
-                return {
-                  link,
-                };
-              } else {
-                return null;
-              }
-            });
-
             devis["Téléphone"] = phoneNumber?.phone;
             devis["Email"] = emailList?.email;
-            devis["Lien unique"] = uniqueLink?.link;
-          } catch (error) {}
+          } catch (error) {
+            console.error(chalk.bgRed(error));
+          }
         }
       }
     }

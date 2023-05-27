@@ -84,9 +84,9 @@ async function scrapePages(urls: IUrl[], retries = 0) {
         if (!nextPageAnchor) {
           hasNextPage = false;
         } else {
-          //
-          hasNextPage = false;
-          //
+          // //
+          // hasNextPage = false;
+          // //
           pageCounter++;
           const nextPageUrl = `${url.path}?page=${pageCounter}`;
           await page.goto(nextPageUrl);
@@ -124,9 +124,9 @@ async function scrapePages(urls: IUrl[], retries = 0) {
 }
 
 const launchScraping = async () => {
-  // await scrapePages(scrapedUrl);
-  // await demandeSpecifique();
-  // await demandeAbandonne();
+  await scrapePages(scrapedUrl);
+  await demandeSpecifique();
+  await demandeAbandonne();
   await devisCommande();
 };
 

@@ -2,8 +2,8 @@ import chalk from "chalk";
 import { IDemande } from "../../../interfaces/IDemande";
 import { convertToISODate } from "../utils/convertToISODate";
 import { addDaysToDate } from "../../addDaysToDate";
+import { Client } from "@notionhq/client";
 
-const { Client } = require("@notionhq/client");
 
 // Initializing a client
 const notion = new Client({ auth: process.env.NOTION_SECRET_KEY });
@@ -22,7 +22,7 @@ const updateItem = async (pageId: string, ID: string, value: string) => {
     });
     console.log(`❓📝 Update Item (Demande de devis spécifique) : ${ID}`);
   } catch (error: any) {
-    console.error(chalk.bgRed("Add Item Error :", error.message));
+    console.error(chalk.bgRed("Patch Item Error :", error.message));
   }
 };
 
