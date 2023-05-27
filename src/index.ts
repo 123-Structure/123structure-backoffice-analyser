@@ -18,7 +18,7 @@ import { generateReport } from "./data/utils/generateReport";
 import { demandeSpecifique } from "./data/utils/notion/demandeSpecifique";
 import { demandeAbandonne } from "./data/utils/notion/demandeAbandonne";
 import { maxRetries } from "./data/constants/maxRetries";
-import { devisSauvegardes } from "./data/utils/notion/devisCommande";
+import { devisCommande } from "./data/utils/notion/devisCommande";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -127,7 +127,7 @@ const launchScraping = async () => {
   // await scrapePages(scrapedUrl);
   // await demandeSpecifique();
   // await demandeAbandonne();
-  await devisSauvegardes();
+  await devisCommande();
 };
 
 // Schedule the script to run periodically

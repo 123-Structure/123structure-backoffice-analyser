@@ -64,9 +64,9 @@ export const patchItem = (demandeSpecifique: IDemande, pages: any[]) => {
       if (
         currentDate >= new Date(firstContact) &&
         currentDate < new Date(firstReminder) &&
-        status !== "⌛ 1er Contact (J+1)"
+        status !== "⌛ 1er contact (J+1)"
       ) {
-        updateItem(page.id, demandeSpecifique.ID, "⌛ 1er Contact (J+1)");
+        updateItem(page.id, demandeSpecifique.ID, "⌛ 1er contact (J+1)");
       }
 
       if (

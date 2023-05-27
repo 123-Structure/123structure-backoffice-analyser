@@ -44,7 +44,7 @@ export const status = (demandeSpecifique: IDemande) => {
     currentDate >= new Date(firstContact) &&
     currentDate < new Date(firstReminder)
   ) {
-    return "⌛ 1er Contact (J+1)";
+    return "⌛ 1er contact (J+1)";
   }
 
   if (
