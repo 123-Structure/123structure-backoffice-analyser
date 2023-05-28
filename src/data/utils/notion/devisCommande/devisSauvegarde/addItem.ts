@@ -138,7 +138,7 @@ export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
         },
         Status: {
           select: {
-            name: "💾 Devis sauvegardé",
+            name: "💾 00 - Devis sauvegardé",
           },
         },
         "Date Devis sauvegardé": {
@@ -273,9 +273,11 @@ export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
         },
       ],
     });
-    console.log(`💾🎉 New Item (Devis sauvegardé) : ${devisSauvegarde.Numéro}`);
+    console.log(`💾🎉 New Item (00 - Devis sauvegardé) : ${devisSauvegarde.Numéro}`);
   } catch (error: any) {
-    console.error(chalk.bgRed("Add Item Error :", error.message));
+    console.error(
+      chalk.bgRed(`Add Item Error (00 - Devis sauvegardé - ${devisSauvegarde.Numéro}) :`, error.message)
+    );
 
     if (retries < maxRetries) {
       console.log(

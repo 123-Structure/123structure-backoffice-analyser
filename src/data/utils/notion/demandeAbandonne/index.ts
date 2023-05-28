@@ -23,7 +23,7 @@ export const demandeAbandonne = async () => {
     if (err) {
       console.error(
         chalk.bgRed(
-          "Error reading JSON file ('Demande de devis abandonnées') :",
+          "Error reading JSON file (Demande de devis abandonnées) :",
           err
         )
       );
@@ -34,22 +34,24 @@ export const demandeAbandonne = async () => {
 
     data.forEach((demandeAbandonne: IDemande) => {
       // Perform operations with each item in the JSON data
-      checkPageExist(
-        databaseIdDemandesAbandonnees,
-        "ID",
-        demandeAbandonne.ID
-      ).then((exists) => {
-        if (exists !== undefined) {
-          if (!exists.test) {
-            addItem(demandeAbandonne);
-          } else {
-            patchItem(demandeAbandonne, exists.pages);
+      checkPageExist(databaseIdDemandesAbandonnees, "ID", demandeAbandonne.ID)
+        .then((exists) => {
+          if (exists !== undefined) {
+            if (!exists.test) {
+              addItem(demandeAbandonne);
+            } else {
+              patchItem(demandeAbandonne, exists.pages);
+            }
           }
-        }
-      });
-      // .catch((error) => {
-      //   console.error(chalk.bgRed("Page Exist Error :", error));
-      // });
+        })
+        .catch((error) => {
+          console.error(
+            chalk.bgRed(
+              `Page Exist Error (Demande de devis spécifique - ${demandeAbandonne.ID}) :`,
+              error
+            )
+          );
+        });
     });
   });
 };

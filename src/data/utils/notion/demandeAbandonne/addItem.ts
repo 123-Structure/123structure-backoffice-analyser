@@ -306,7 +306,12 @@ export const addItem = async (demandeAbandonne: IDemande, retries = 0) => {
       `🗑️🎉 New Item (Demande de devis abandonnée) : ${demandeAbandonne.ID}`
     );
   } catch (error: any) {
-    console.error(chalk.bgRed("Add Item Error :", error.message));
+    console.error(
+      chalk.bgRed(
+        `Add Item Error (Demande de devis abandonnée - ${demandeAbandonne.ID}) :`,
+        error.message
+      )
+    );
 
     if (retries < maxRetries) {
       console.log(

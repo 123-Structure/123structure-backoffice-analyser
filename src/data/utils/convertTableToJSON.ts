@@ -127,10 +127,7 @@ export const convertTableToJSON = async (
         }
       }
     }
-    if (
-      urlId.includes("devis_sauvegardes") ||
-      urlId.includes("commandes_01-attente-validation-initiale-client")
-    ) {
+    if (urlId.includes("devis_sauvegardes") || urlId.includes("commandes")) {
       if (data) {
         for (const devis of data) {
           try {
@@ -160,9 +157,7 @@ export const convertTableToJSON = async (
               devis["Lien unique"] = uniqueLink?.link;
             }
 
-            if (
-              urlId.includes("commandes_01-attente-validation-initiale-client")
-            ) {
+            if (urlId.includes("commandes")) {
               await page.goto(
                 `https://app.123structure.fr/backoffice/order/${extractID(
                   devis["Numéro"]
@@ -177,7 +172,7 @@ export const convertTableToJSON = async (
                   Array.from(div.children).forEach((child) => {
                     if (child instanceof HTMLElement) {
                       const innerHTML = child.innerHTML;
-                      if (innerHTML.includes("Devis")) {
+                      if (innerHTML.includes("Devis :")) {
                         const ID = innerHTML.trim().replace("Devis : ", "");
                         devis = ID;
                       }
@@ -192,13 +187,20 @@ export const convertTableToJSON = async (
               });
 
               const uniqueLink = await page.evaluate(() => {
-                const uniqueLinkButton = document.querySelector(
-                  "#mainForm > div > div:nth-child(1) > div > div:nth-child(1) > div > div > a:nth-child(2)"
-                ) as HTMLAnchorElement;
-                if (uniqueLinkButton) {
-                  const link = uniqueLinkButton.href;
+                const linkList = document.querySelectorAll("a");
+                let url = ""
+                if (linkList) {
+                  linkList.forEach((link: HTMLAnchorElement) => {
+                    if (
+                      link.href.includes(
+                        "https://app.123structure.fr/order/show/"
+                      )
+                    ) {
+                      url = link.href;
+                    }
+                  });
                   return {
-                    link,
+                    link: url,
                   };
                 } else {
                   return null;

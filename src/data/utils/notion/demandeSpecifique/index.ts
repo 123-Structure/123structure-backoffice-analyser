@@ -23,7 +23,7 @@ export const demandeSpecifique = async () => {
     if (err) {
       console.error(
         chalk.bgRed(
-          "Error reading JSON file ('Demande de devis spécifique') :",
+          "Error reading JSON file (Demande de devis spécifique) :",
           err
         )
       );
@@ -45,7 +45,12 @@ export const demandeSpecifique = async () => {
           }
         })
         .catch((error) => {
-          console.error(chalk.bgRed("Page Exist Error :", error));
+          console.error(
+            chalk.bgRed(
+              `Page Exist Error (Demande de devis spécifique - ${demandeSpecifique.ID}) :`,
+              error
+            )
+          );
         });
     });
   });

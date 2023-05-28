@@ -11,7 +11,7 @@ export const devisSauvegardes = async () => {
   const timestamp = getCurrentTimestamp();
 
   console.log(
-    chalk.bgCyan(`💾📖 Reading 'Devis sauvegardés' at ${timestamp}...`)
+    chalk.bgCyan(`💾📖 Reading '00 - Devis sauvegardés' at ${timestamp}...`)
   );
 
   const filePath = getLastModifiedFilePath("devis_sauvegardes");
@@ -19,7 +19,7 @@ export const devisSauvegardes = async () => {
   fs.readFile(filePath, "utf-8", (err, jsonData) => {
     if (err) {
       console.error(
-        chalk.bgRed("Error reading JSON file ('Devis sauvegardés') :", err)
+        chalk.bgRed("Error reading JSON file (Devis sauvegardés) :", err)
       );
       return;
     }
@@ -37,7 +37,12 @@ export const devisSauvegardes = async () => {
           }
         })
         .catch((error) => {
-          console.error(chalk.bgRed("Page Exist Error :", error));
+          console.error(
+            chalk.bgRed(
+              `Page Exist Error (Devis sauvegardés - ${devisSauvegarde.Numéro}) :`,
+              error
+            )
+          );
         });
     });
   });

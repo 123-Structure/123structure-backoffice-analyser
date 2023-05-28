@@ -124,7 +124,7 @@ async function scrapePages(urls: IUrl[], retries = 0) {
 }
 
 const launchScraping = async () => {
-  await scrapePages(scrapedUrl);
+  // await scrapePages(scrapedUrl);
   await demandeSpecifique();
   await demandeAbandonne();
   await devisCommande();
@@ -134,21 +134,21 @@ const launchScraping = async () => {
 (async () => {
   launchScraping();
 
-  // if (process.env.APP_MODE === "DEVELOPMENT_15") {
-  //   cron.schedule(cronScheduleEveryFifteenMinutes, async () => {
-  //     launchScraping();
-  //   });
-  // }
+  if (process.env.APP_MODE === "DEVELOPMENT_15") {
+    cron.schedule(cronScheduleEveryFifteenMinutes, async () => {
+      launchScraping();
+    });
+  }
 
-  // if (process.env.APP_MODE === "DEVELOPMENT_30") {
-  //   cron.schedule(cronScheduleEveryThirtyMinutes, async () => {
-  //     launchScraping();
-  //   });
-  // }
+  if (process.env.APP_MODE === "DEVELOPMENT_30") {
+    cron.schedule(cronScheduleEveryThirtyMinutes, async () => {
+      launchScraping();
+    });
+  }
 
-  // if (process.env.APP_MODE === "PRODUCTION") {
-  //   cron.schedule(cronScheduleOnWorkDay, async () => {
-  //     launchScraping();
-  //   });
-  // }
+  if (process.env.APP_MODE === "PRODUCTION") {
+    cron.schedule(cronScheduleOnWorkDay, async () => {
+      launchScraping();
+    });
+  }
 })();

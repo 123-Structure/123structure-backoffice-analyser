@@ -22,7 +22,12 @@ const updateItem = async (pageId: string, ID: string, value: string) => {
     });
     console.log(`🗑️📝 Update Item (Demande de devis abandonnée) : ${ID}`);
   } catch (error: any) {
-    console.error(chalk.bgRed("Patch Item Error :", error.message));
+    console.error(
+      chalk.bgRed(
+        `Patch Item Error (Demande de devis abandonnée - ${ID}) :`,
+        error.message
+      )
+    );
   }
 };
 

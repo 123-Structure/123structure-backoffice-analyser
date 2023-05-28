@@ -309,7 +309,12 @@ export const addItem = async (demandeSpecifique: IDemande, retries = 0) => {
       `❓🎉 New Item (Demande de devis spécifique) : ${demandeSpecifique.ID}`
     );
   } catch (error: any) {
-    console.error(chalk.bgRed("Add Item Error :", error.message));
+    console.error(
+      chalk.bgRed(
+        `Add Item Error (Demande de devis spécifique - ${demandeSpecifique.ID}) :`,
+        error.message
+      )
+    );
 
     if (retries < maxRetries) {
       console.log(
