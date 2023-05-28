@@ -124,7 +124,7 @@ async function scrapePages(urls: IUrl[], retries = 0) {
 }
 
 const launchScraping = async () => {
-  // await scrapePages(scrapedUrl);
+  await scrapePages(scrapedUrl);
   await demandeSpecifique();
   await demandeAbandonne();
   await devisCommande();
