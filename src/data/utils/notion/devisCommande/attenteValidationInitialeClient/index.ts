@@ -13,7 +13,7 @@ export const attenteValidationInitialeClient = async () => {
 
   console.log(
     chalk.bgCyan(
-      `✅📖 Reading 'Attente de validation initial du client' at ${timestamp}...`
+      `✅📖 Reading 'Attente de validation initiale du client' at ${timestamp}...`
     )
   );
 
@@ -25,7 +25,7 @@ export const attenteValidationInitialeClient = async () => {
     if (err) {
       console.error(
         chalk.bgRed(
-          "Error reading JSON file ('Attente de validation initial du client') :",
+          "Error reading JSON file ('Attente de validation initiale du client') :",
           err
         )
       );
@@ -52,4 +52,3 @@ export const attenteValidationInitialeClient = async () => {
     });
   });
 };
-;

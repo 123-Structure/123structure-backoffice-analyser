@@ -134,7 +134,7 @@ export const addItem = async (commande: IDevisCommande, retries = 0) => {
         },
         Status: {
           select: {
-            name: "✅ 01 - Attente de validation initial du client",
+            name: "✅ 01 - Attente de validation initiale du client",
           },
         },
       },
@@ -267,7 +267,7 @@ export const addItem = async (commande: IDevisCommande, retries = 0) => {
       ],
     });
     console.log(
-      `✅🎉 New Item (Attente de validation initial du client) : ${commande.Numéro}`
+      `✅🎉 New Item (Attente de validation initiale du client) : ${commande.Numéro}`
     );
   } catch (error: any) {
     console.error(chalk.bgRed("Add Item Error :", error.message));

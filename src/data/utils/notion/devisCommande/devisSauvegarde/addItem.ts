@@ -7,6 +7,7 @@ import { maxRetries } from "../../../../constants/maxRetries";
 import { IDevisCommande } from "../../../../interfaces/IDevisCommande";
 import { emailObject } from "./email/emailObject";
 import { extractID } from "../../utils/extractID";
+import { getCurrentTimestamp } from "../../../getCurrentTimestamp";
 
 // Initializing a client
 const notion = new Client({
@@ -138,6 +139,11 @@ export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
         Status: {
           select: {
             name: "💾 Devis sauvegardé",
+          },
+        },
+        "Date Devis sauvegardé": {
+          date: {
+            start: convertToISODate(getCurrentTimestamp(true), "/", "-"),
           },
         },
       },
