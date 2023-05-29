@@ -22,7 +22,7 @@ export const patchItem = (
       const status = page.properties.Status.select.name;
       if (
         status !== urlTitle &&
-        !status.includes("Terminé") &&
+        !status.includes("Inactif") &&
         !status.includes("Archivé")
       ) {
         await notion.pages.update({
@@ -136,7 +136,8 @@ export const patchItem = (
     } catch (error: any) {
       console.error(
         chalk.bgRed(
-          `Patch Item Error (${urlTitle.substring(2)} - ${commande.Numéro}) :`,
+          `Patch Item Error (${urlTitle.substring(2)} - ${commande.Numéro}
+          ) :`,
           error.message
         )
       );

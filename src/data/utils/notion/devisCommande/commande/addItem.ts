@@ -335,10 +335,10 @@ export const addItem = async (
           },
         ],
       });
+      console.log(
+        `${emoji}🎉 New Item (${urlTitle.substring(2)}) : ${commande.Numéro}`
+      );
     }
-    console.log(
-      `${emoji}🎉 New Item (${urlTitle.substring(2)}) : ${commande.Numéro}`
-    );
   } catch (error: any) {
     console.error(
       chalk.bgRed(
