@@ -12,3 +12,4 @@ services:
       - SYS_ADMIN # Add the SYS_ADMIN capability to the container
     tty: true # Allocate a pseudo-TTY for the container
     container_name: 123str_backoffice_analyser # Set the container name to "123str_backoffice_analyser"
+    restart: always 

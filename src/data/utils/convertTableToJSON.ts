@@ -122,7 +122,7 @@ export const convertTableToJSON = async (
 
             await page.close();
           } catch (error) {
-            console.error(`Navigation failed: ${error}`);
+            console.error(chalk.bgRed(`Navigation failed: ${error}`));
           }
         }
       }
