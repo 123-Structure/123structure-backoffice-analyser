@@ -23,8 +23,7 @@ export const patchItem = (
       if (
         status !== urlTitle &&
         !status.includes("Inactif") &&
-        !status.includes("Archivé") &&
-        !status.includes("En cours")
+        !status.includes("Archivé")
       ) {
         await notion.pages.update({
           page_id: page.id,

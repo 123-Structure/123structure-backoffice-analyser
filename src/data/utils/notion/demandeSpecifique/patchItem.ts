@@ -64,7 +64,11 @@ export const patchItem = (demandeSpecifique: IDemande, pages: any[]) => {
 
     const status = page.properties.Status.select.name;
 
-    if (!status.includes("Terminé") && !status.includes("Archivé")) {
+    if (
+      !status.includes("Terminé") &&
+      !status.includes("Archivé") &&
+      !status.includes("En cours")
+    ) {
       if (
         currentDate >= new Date(firstContact) &&
         currentDate < new Date(firstReminder) &&

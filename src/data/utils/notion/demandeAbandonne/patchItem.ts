@@ -4,7 +4,6 @@ import { convertToISODate } from "../utils/convertToISODate";
 import { addDaysToDate } from "../../addDaysToDate";
 import { Client } from "@notionhq/client";
 
-
 // Initializing a client
 const notion = new Client({ auth: process.env.NOTION_SECRET_KEY });
 
@@ -65,7 +64,11 @@ export const patchItem = (demandeAbandonne: IDemande, pages: any[]) => {
 
     const status = page.properties.Status.select.name;
 
-    if (status !== "✅ Terminé" && status !== "🗃️ Archivé") {
+    if (
+      !status.includes("Terminé") &&
+      !status.includes("Archivé") &&
+      !status.includes("En cours")
+    ) {
       if (
         currentDate >= new Date(firstContact) &&
         currentDate < new Date(firstReminder) &&
