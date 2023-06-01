@@ -7,6 +7,7 @@ import { addDaysToDate } from "../../addDaysToDate";
 import { emailObject } from "./email/emailObject";
 import { retryDelay } from "../../retryDelay";
 import { maxRetries } from "../../../constants/maxRetries";
+import { firstContact } from "./email/firstContact";
 
 // Initializing a client
 const notion = new Client({
@@ -255,20 +256,20 @@ export const addItem = async (demandeAbandonne: IDemande, retries = 0) => {
                   color: "yellow_background",
                 },
               },
-              // {
-              //   object: "block",
-              //   toggle: {
-              //     rich_text: [
-              //       {
-              //         type: "text",
-              //         text: {
-              //           content: "1ère prise de contact (J+1)",
-              //         },
-              //       },
-              //     ],
-              //     children: firstContact(demandeAbandonne),
-              //   },
-              // },
+              {
+                object: "block",
+                toggle: {
+                  rich_text: [
+                    {
+                      type: "text",
+                      text: {
+                        content: "1ère prise de contact (J+1)",
+                      },
+                    },
+                  ],
+                  children: firstContact(demandeAbandonne),
+                },
+              },
               // {
               //   object: "block",
               //   toggle: {
