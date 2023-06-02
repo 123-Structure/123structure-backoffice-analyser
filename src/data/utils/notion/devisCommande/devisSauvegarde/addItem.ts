@@ -8,6 +8,7 @@ import { IDevisCommande } from "../../../../interfaces/IDevisCommande";
 import { emailObject } from "./email/emailObject";
 import { extractID } from "../../utils/extractID";
 import { getCurrentTimestamp } from "../../../getCurrentTimestamp";
+import { reference } from "./email/reference";
 
 // Initializing a client
 const notion = new Client({
@@ -268,15 +269,34 @@ export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
                   color: "yellow_background",
                 },
               },
+              {
+                object: "block",
+                toggle: {
+                  rich_text: [
+                    {
+                      type: "text",
+                      text: {
+                        content: "Référence",
+                      },
+                    },
+                  ],
+                  children: reference(devisSauvegarde),
+                },
+              },
             ],
           },
         },
       ],
     });
-    console.log(`💾🎉 New Item (00 - Devis sauvegardé) : ${devisSauvegarde.Numéro}`);
+    console.log(
+      `💾🎉 New Item (00 - Devis sauvegardé) : ${devisSauvegarde.Numéro}`
+    );
   } catch (error: any) {
     console.error(
-      chalk.bgRed(`Add Item Error (00 - Devis sauvegardé - ${devisSauvegarde.Numéro}) :`, error.message)
+      chalk.bgRed(
+        `Add Item Error (00 - Devis sauvegardé - ${devisSauvegarde.Numéro}) :`,
+        error.message
+      )
     );
 
     if (retries < maxRetries) {

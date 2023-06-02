@@ -1,7 +1,6 @@
 export interface IDevisCommande {
   Numéro: string;
   Devis: string;
-  Commande: string;
   "Date de création": string;
   "Adresse de chantier": string;
   Pro: string;
