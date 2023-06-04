@@ -9,6 +9,7 @@ import { emailObject } from "./email/emailObject";
 import { extractID } from "../../utils/extractID";
 import { getCurrentTimestamp } from "../../../getCurrentTimestamp";
 import { reference } from "./email/reference";
+import { yourQuote } from "./email/yourQuote";
 
 // Initializing a client
 const notion = new Client({
@@ -267,6 +268,20 @@ export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
                     },
                   ],
                   color: "yellow_background",
+                },
+              },
+              {
+                object: "block",
+                toggle: {
+                  rich_text: [
+                    {
+                      type: "text",
+                      text: {
+                        content: "Envoi lien unique et mode opératoire",
+                      },
+                    },
+                  ],
+                  children: yourQuote(devisSauvegarde),
                 },
               },
               {

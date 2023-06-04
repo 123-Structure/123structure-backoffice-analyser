@@ -10,6 +10,8 @@ import chalk from "chalk";
 import { addDaysToDate } from "../../addDaysToDate";
 import { retryDelay } from "../../retryDelay";
 import { maxRetries } from "../../../constants/maxRetries";
+import { validationPJ } from "./email/validationPJ";
+import { yourQuote } from "./email/yourQuote";
 
 // Initializing a client
 const notion = new Client({
@@ -298,6 +300,34 @@ export const addItem = async (demandeSpecifique: IDemande, retries = 0) => {
                     },
                   ],
                   children: lastReminder(demandeSpecifique),
+                },
+              },
+              {
+                object: "block",
+                toggle: {
+                  rich_text: [
+                    {
+                      type: "text",
+                      text: {
+                        content: "Validation pièces jointes avant envoi devis",
+                      },
+                    },
+                  ],
+                  children: validationPJ(),
+                },
+              },
+              {
+                object: "block",
+                toggle: {
+                  rich_text: [
+                    {
+                      type: "text",
+                      text: {
+                        content: "Envoi lien unique et mode opératoire",
+                      },
+                    },
+                  ],
+                  children: yourQuote(demandeSpecifique),
                 },
               },
             ],

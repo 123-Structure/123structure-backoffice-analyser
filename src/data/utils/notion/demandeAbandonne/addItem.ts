@@ -8,6 +8,10 @@ import { emailObject } from "./email/emailObject";
 import { retryDelay } from "../../retryDelay";
 import { maxRetries } from "../../../constants/maxRetries";
 import { firstContact } from "./email/firstContact";
+import { validationPJ } from "./email/validationPJ";
+import { firstReminder } from "./email/firstReminder";
+import { lastReminder } from "./email/lastReminder";
+import { yourQuote } from "./email/yourQuote";
 
 // Initializing a client
 const notion = new Client({
@@ -270,34 +274,62 @@ export const addItem = async (demandeAbandonne: IDemande, retries = 0) => {
                   children: firstContact(demandeAbandonne),
                 },
               },
-              // {
-              //   object: "block",
-              //   toggle: {
-              //     rich_text: [
-              //       {
-              //         type: "text",
-              //         text: {
-              //           content: "1ère relance (J+7)",
-              //         },
-              //       },
-              //     ],
-              //     children: firstReminder(demandeAbandonne),
-              //   },
-              // },
-              // {
-              //   object: "block",
-              //   toggle: {
-              //     rich_text: [
-              //       {
-              //         type: "text",
-              //         text: {
-              //           content: "Dernière relance (J+14)",
-              //         },
-              //       },
-              //     ],
-              //     children: lastReminder(demandeAbandonne),
-              //   },
-              // },
+              {
+                object: "block",
+                toggle: {
+                  rich_text: [
+                    {
+                      type: "text",
+                      text: {
+                        content: "1ère relance (J+7)",
+                      },
+                    },
+                  ],
+                  children: firstReminder(demandeAbandonne),
+                },
+              },
+              {
+                object: "block",
+                toggle: {
+                  rich_text: [
+                    {
+                      type: "text",
+                      text: {
+                        content: "Dernière relance (J+14)",
+                      },
+                    },
+                  ],
+                  children: lastReminder(demandeAbandonne),
+                },
+              },
+              {
+                object: "block",
+                toggle: {
+                  rich_text: [
+                    {
+                      type: "text",
+                      text: {
+                        content: "Validation pièces jointes avant envoi devis",
+                      },
+                    },
+                  ],
+                  children: validationPJ(),
+                },
+              },
+              {
+                object: "block",
+                toggle: {
+                  rich_text: [
+                    {
+                      type: "text",
+                      text: {
+                        content: "Envoi lien unique et mode opératoire",
+                      },
+                    },
+                  ],
+                  children: yourQuote(demandeAbandonne),
+                },
+              },
             ],
           },
         },

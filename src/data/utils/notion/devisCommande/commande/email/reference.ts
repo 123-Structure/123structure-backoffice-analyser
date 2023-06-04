@@ -7,23 +7,32 @@ const getText = (commande: IDevisCommande) =>
 ${commande["Adresse de chantier"].split("\n")[0]}
 <break>
 ${
-  commande.Téléphone[0] === undefined ||
-  commande.Téléphone[0] === ""
+  commande.Téléphone[0] === undefined || commande.Téléphone[0] === ""
     ? "-"
     : commande.Téléphone[0]
 } / ${
-    commande.Téléphone[1] === undefined ||
-    commande.Téléphone[1] === ""
+    commande.Téléphone[1] === undefined || commande.Téléphone[1] === ""
       ? ""
       : commande.Téléphone[1]
   } / ${
-    commande.Téléphone[2] === undefined ||
-    commande.Téléphone[2] === ""
+    commande.Téléphone[2] === undefined || commande.Téléphone[2] === ""
       ? ""
       : commande.Téléphone[2]
   }
 <break>
-${commande.Email}
+${
+  commande.Email[0] === undefined || commande.Email[0] === ""
+    ? "-"
+    : commande.Email[0]
+} / ${
+    commande.Email[1] === undefined || commande.Email[1] === ""
+      ? ""
+      : commande.Email[1]
+  } / ${
+    commande.Email[2] === undefined || commande.Email[2] === ""
+      ? ""
+      : commande.Email[2]
+  }
 <break>
 Lieu de construction : ${commande["Adresse de chantier"]
     .split("\n")[2]
