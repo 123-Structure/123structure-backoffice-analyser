@@ -165,7 +165,7 @@ export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
                     .split("\n")[2]
                     .slice(0, 5)} ${devisSauvegarde["Adresse de chantier"]
                     .split("\n")[2]
-                    .substring(7)})`,
+                    .substring(6)})`,
                   link: {
                     url: `https://app.123structure.fr/backoffice/quote/${extractID(
                       devisSauvegarde["Numéro"]
@@ -195,7 +195,7 @@ export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
                     .split("\n")[2]
                     .slice(0, 5)} ${devisSauvegarde["Adresse de chantier"]
                     .split("\n")[2]
-                    .substring(7)})`,
+                    .substring(6)})`,
                   link: {
                     url: devisSauvegarde["Lien unique"],
                   },
