@@ -10,6 +10,7 @@ import { extractID } from "../../utils/extractID";
 import { getCurrentTimestamp } from "../../../getCurrentTimestamp";
 import { reference } from "./email/reference";
 import { yourQuote } from "./email/yourQuote";
+import { contactDevisSauvegarde } from "./email/contactDevisSauvegarde";
 
 // Initializing a client
 const notion = new Client({
@@ -282,6 +283,20 @@ export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
                     },
                   ],
                   children: yourQuote(devisSauvegarde),
+                },
+              },
+              {
+                object: "block",
+                toggle: {
+                  rich_text: [
+                    {
+                      type: "text",
+                      text: {
+                        content: "Contact devis sauvegardé",
+                      },
+                    },
+                  ],
+                  children: contactDevisSauvegarde(devisSauvegarde),
                 },
               },
               {
