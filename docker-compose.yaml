@@ -4,7 +4,7 @@ services:
   # Service for Puppeteer
   puppeteer:
     build:
-      context: .
+      context: ./script
       dockerfile: Dockerfile
     stdin_open: true # Keep standard input open to allow for interaction
     init: true # Use an init process as the entry point for the container
