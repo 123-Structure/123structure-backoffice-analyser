@@ -8,7 +8,7 @@ import { databaseIdDemandesAbandonnees } from "../../../constants/notionDatabase
 import chalk from "chalk";
 import { getCurrentTimestamp } from "../../getCurrentTimestamp";
 
-export const demandeAbandonne = async () => {
+export const demandeAbandonnee = async () => {
   const timestamp = getCurrentTimestamp();
 
   console.log(

@@ -16,7 +16,7 @@ import { retryDelay } from "./data/utils/retryDelay";
 import { getCurrentTimestamp } from "./data/utils/getCurrentTimestamp";
 import { generateReport } from "./data/utils/generateReport";
 import { demandeSpecifique } from "./data/utils/notion/demandeSpecifique";
-import { demandeAbandonne } from "./data/utils/notion/demandeAbandonne";
+import { demandeAbandonnee } from "./data/utils/notion/demandeAbandonnee";
 import { maxRetries } from "./data/constants/maxRetries";
 import { devisCommande } from "./data/utils/notion/devisCommande";
 
@@ -126,7 +126,7 @@ async function scrapePages(urls: IUrl[], retries = 0) {
 const launchScraping = async () => {
   await scrapePages(scrapedUrl);
   await demandeSpecifique();
-  await demandeAbandonne();
+  await demandeAbandonnee();
   await devisCommande();
 };
 

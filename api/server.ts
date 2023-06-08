@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import chalk from "chalk";
 import cors from "cors";
 import demandeSpecifiqueRouter from "./src/routes/demandeSpecifique.routes";
+import demandeAbandonneeRouter from "./src/routes/demandeAbandonnee.routes";
+import devisCommandeRouter from "./src/routes/devisCommande.routes";
 
 dotenv.config();
 
@@ -51,6 +53,8 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api/demandeSpecifique", demandeSpecifiqueRouter);
+app.use("/api/demandeAbandonnee", demandeAbandonneeRouter);
+app.use("/api/devisCommande", devisCommandeRouter);
 
 // Listen requests
 app.listen(port, () => {
