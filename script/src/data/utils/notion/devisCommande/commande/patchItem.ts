@@ -39,6 +39,17 @@ export const patchItem = (
               ],
             },
 
+            "Montant HT": {
+              rich_text: [
+                {
+                  type: "text",
+                  text: {
+                    content: commande["Montant HT"].replace("€", ""),
+                  },
+                },
+              ],
+            },
+
             Status: {
               select: {
                 name: urlTitle,

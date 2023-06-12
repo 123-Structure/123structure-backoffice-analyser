@@ -7,6 +7,7 @@ export interface IDemande {
   Ville: string;
   "Type de projet": string;
   "Créé le": string;
+  "Montant HT": string;
   Type: string;
   "Informations complémentaires": string;
 }

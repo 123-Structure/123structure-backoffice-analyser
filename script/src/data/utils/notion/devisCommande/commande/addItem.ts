@@ -135,6 +135,16 @@ export const addItem = async (
               start: convertToISODate(commande["Date de création"], "-", "-"),
             },
           },
+          "Montant HT": {
+            rich_text: [
+              {
+                type: "text",
+                text: {
+                  content: commande["Montant HT"].replace("€", ""),
+                },
+              },
+            ],
+          },
           "Type de projet": {
             select: {
               name: "🏡 Construction neuve",

@@ -127,6 +127,16 @@ export const addItem = async (demandeAbandonne: IDemande, retries = 0) => {
             start: convertToISODate(demandeAbandonne["Créé le"], "-", "-"),
           },
         },
+        "Montant HT": {
+          rich_text: [
+            {
+              type: "text",
+              text: {
+                content: demandeAbandonne["Montant HT"],
+              },
+            },
+          ],
+        },
         "Type de projet": {
           select: {
             name: `🏡 ${demandeAbandonne["Type de projet"]}`,

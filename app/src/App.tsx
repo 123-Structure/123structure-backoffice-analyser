@@ -19,7 +19,7 @@ const App = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        setDemandeSpecifique(data.resListts);
+        setDemandeSpecifique(data.results);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -31,7 +31,7 @@ const App = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        setDemandeAbandonnee(data.resListts);
+        setDemandeAbandonnee(data.results);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -42,7 +42,7 @@ const App = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        setDevisCommande(data.resListts);
+        setDevisCommande(data.results);
       })
       .catch((error) => {
         console.error("Error:", error);

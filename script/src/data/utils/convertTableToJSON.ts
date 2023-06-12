@@ -114,11 +114,41 @@ export const convertTableToJSON = async (
               }
             });
 
+            const amount = await page.evaluate(() => {
+              // Select the div with the class "card-body"
+              const cardBody = document.querySelector(
+                "#layout-wrapper > div.main-content > div > div > div > div:nth-child(2) > div > div"
+              );
+
+              if (cardBody !== null) {
+                // Select all the <p> tags inside the div
+                const paragraphs = cardBody.querySelectorAll("p");
+
+                // Iterate through the <p> tags and find the one containing the specific text
+                for (let i = 0; i < paragraphs.length; i++) {
+                  if (paragraphs[i].innerHTML.includes("Type de demande : ")) {
+                    const info = paragraphs[i].innerHTML;
+                    return {
+                      information: info
+                        .trim()
+                        .replace("Type de demande : ", "")
+                        .replace("<b>", "")
+                        .replace(" €</b>", "")
+                        .replace("</b>",""),
+                    };
+                  }
+                }
+              } else {
+                return null;
+              }
+            });
+
             demande["Téléphone"] = coord?.phone;
             demande["Email"] = coord?.email;
             demande["Type de projet"] = type?.projectType;
             demande["Informations complémentaires"] =
               additionalInformation?.information;
+            demande["Montant HT"] = amount?.information;
 
             await page.close();
           } catch (error) {
@@ -188,7 +218,7 @@ export const convertTableToJSON = async (
 
               const uniqueLink = await page.evaluate(() => {
                 const linkList = document.querySelectorAll("a");
-                let url = ""
+                let url = "";
                 if (linkList) {
                   linkList.forEach((link: HTMLAnchorElement) => {
                     if (

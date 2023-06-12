@@ -126,6 +126,17 @@ export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
             ),
           },
         },
+        "Montant HT": {
+          rich_text: [
+            {
+              type: "text",
+              text: {
+                content: devisSauvegarde["Montant HT"]
+                  .replace("€",""),
+              },
+            },
+          ],
+        },
         "Type de projet": {
           select: {
             name: "🏡 Construction neuve",
