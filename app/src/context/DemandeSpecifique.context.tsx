@@ -1,4 +1,4 @@
-import { createContext, Dispatch, SetStateAction, useState } from "react";
+import { createContext, Dispatch, SetStateAction, useEffect, useState } from "react";
 
 export const DemandeSpecifiqueContext = createContext<[]>([]);
 export const DemandeSpecifiqueUpdateContext = createContext<
@@ -11,6 +11,25 @@ interface INotionContextProps {
 
 const DemandeSpecifiqueContextProvider = (props: INotionContextProps) => {
   const [notionData, setNotionData] = useState<[]>([]);
+
+  useEffect(() => {
+    const handleDemandeSpecifique = () => {
+      fetch("http://localhost:3000/api/demandeSpecifique")
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log(data);
+          setNotionData(data.results);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    };
+  
+    return () => {
+      handleDemandeSpecifique()
+    }
+  }, [])
+  
 
   return (
     <DemandeSpecifiqueContext.Provider value={notionData}>
