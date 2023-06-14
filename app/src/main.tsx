@@ -3,20 +3,20 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { MantineProvider } from "@mantine/core";
-import DemandeSpecifiqueContextProvider from "./context/DemandeSpecifique.context.tsx";
-import DemandeAbandonneeContextProvider from "./context/AllPages/DemandeAbandonnee.context.tsx";
-import DevisCommandeContextProvider from "./context/DevisCommande.context.tsx";
+import AllPagesDemandeSpecifiqueContextProvider from "./context/AllPages/AllPagesDemandeSpecifique.context.tsx";
+import AllPagesDemandeAbandonneeContextProvider from "./context/AllPages/AllPagesDemandeAbandonnee.context.tsx";
+import AllPagesDevisCommandeContextProvider from "./context/AllPages/AllPagesDevisCommande.context.tsx";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <DemandeSpecifiqueContextProvider>
-      <DemandeAbandonneeContextProvider>
-        <DevisCommandeContextProvider>
+    <AllPagesDemandeSpecifiqueContextProvider>
+      <AllPagesDemandeAbandonneeContextProvider>
+        <AllPagesDevisCommandeContextProvider>
           <MantineProvider withGlobalStyles withNormalizeCSS>
             <App />
           </MantineProvider>
-        </DevisCommandeContextProvider>
-      </DemandeAbandonneeContextProvider>
-    </DemandeSpecifiqueContextProvider>
+        </AllPagesDevisCommandeContextProvider>
+      </AllPagesDemandeAbandonneeContextProvider>
+    </AllPagesDemandeSpecifiqueContextProvider>
   </React.StrictMode>
 );

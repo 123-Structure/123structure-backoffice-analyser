@@ -11,7 +11,7 @@ interface INotionContextProps {
   children: React.ReactNode;
 }
 
-export const DevisCommandeContext = createContext<IGetAllPages>({
+export const AllPagesDemandeAbandonneeContext = createContext<IGetAllPages>({
   type: "",
   length: 0,
   period: {
@@ -19,11 +19,14 @@ export const DevisCommandeContext = createContext<IGetAllPages>({
     end: "00/00/0000",
   },
 });
-export const DevisCommandeUpdateContext = createContext<
+
+export const AllPagesDemandeAbandonneeUpdateContext = createContext<
   Dispatch<SetStateAction<IGetAllPages>>
 >(() => {});
 
-const DevisCommandeContextProvider = (props: INotionContextProps) => {
+const AllPagesDemandeAbandonneeContextProvider = (
+  props: INotionContextProps
+) => {
   const [notionData, setNotionData] = useState<IGetAllPages>({
     type: "",
     length: 0,
@@ -34,8 +37,8 @@ const DevisCommandeContextProvider = (props: INotionContextProps) => {
   });
 
   useEffect(() => {
-    const handleDevisCommande = () => {
-      fetch("http://localhost:3000/api/devisCommande")
+    const handleDemandeAbandonnee = () => {
+      fetch("http://localhost:3000/api/demandeAbandonnee")
         .then((response) => response.json())
         .then((data) => {
           setNotionData(data);
@@ -46,17 +49,17 @@ const DevisCommandeContextProvider = (props: INotionContextProps) => {
     };
 
     return () => {
-      handleDevisCommande();
+      handleDemandeAbandonnee();
     };
   }, []);
 
   return (
-    <DevisCommandeContext.Provider value={notionData}>
-      <DevisCommandeUpdateContext.Provider value={setNotionData}>
+    <AllPagesDemandeAbandonneeContext.Provider value={notionData}>
+      <AllPagesDemandeAbandonneeUpdateContext.Provider value={setNotionData}>
         {props.children}
-      </DevisCommandeUpdateContext.Provider>
-    </DevisCommandeContext.Provider>
+      </AllPagesDemandeAbandonneeUpdateContext.Provider>
+    </AllPagesDemandeAbandonneeContext.Provider>
   );
 };
 
-export default DevisCommandeContextProvider;
+export default AllPagesDemandeAbandonneeContextProvider;

@@ -11,7 +11,7 @@ interface INotionContextProps {
   children: React.ReactNode;
 }
 
-export const DemandeAbandonneeContext = createContext<IGetAllPages>({
+export const AllPagesDevisCommandeContext = createContext<IGetAllPages>({
   type: "",
   length: 0,
   period: {
@@ -19,11 +19,11 @@ export const DemandeAbandonneeContext = createContext<IGetAllPages>({
     end: "00/00/0000",
   },
 });
-export const DemandeAbandonneeUpdateContext = createContext<
+export const AllPagesDevisCommandeUpdateContext = createContext<
   Dispatch<SetStateAction<IGetAllPages>>
 >(() => {});
 
-const DemandeAbandonneeContextProvider = (props: INotionContextProps) => {
+const AllPagesDevisCommandeContextProvider = (props: INotionContextProps) => {
   const [notionData, setNotionData] = useState<IGetAllPages>({
     type: "",
     length: 0,
@@ -34,8 +34,8 @@ const DemandeAbandonneeContextProvider = (props: INotionContextProps) => {
   });
 
   useEffect(() => {
-    const handleDemandeAbandonnee = () => {
-      fetch("http://localhost:3000/api/demandeAbandonnee")
+    const handleDevisCommande = () => {
+      fetch("http://localhost:3000/api/devisCommande")
         .then((response) => response.json())
         .then((data) => {
           setNotionData(data);
@@ -46,17 +46,17 @@ const DemandeAbandonneeContextProvider = (props: INotionContextProps) => {
     };
 
     return () => {
-      handleDemandeAbandonnee();
+      handleDevisCommande();
     };
   }, []);
 
   return (
-    <DemandeAbandonneeContext.Provider value={notionData}>
-      <DemandeAbandonneeUpdateContext.Provider value={setNotionData}>
+    <AllPagesDevisCommandeContext.Provider value={notionData}>
+      <AllPagesDevisCommandeUpdateContext.Provider value={setNotionData}>
         {props.children}
-      </DemandeAbandonneeUpdateContext.Provider>
-    </DemandeAbandonneeContext.Provider>
+      </AllPagesDevisCommandeUpdateContext.Provider>
+    </AllPagesDevisCommandeContext.Provider>
   );
 };
 
-export default DemandeAbandonneeContextProvider;
+export default AllPagesDevisCommandeContextProvider;

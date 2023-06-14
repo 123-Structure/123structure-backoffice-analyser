@@ -1,13 +1,13 @@
 import NotionDataLength from "./components/utils/NotionDataLength";
 import { Flex } from "@mantine/core";
-import { useDemandeAbandonnee } from "./hooks/notion/AllPages/demandeAbandonnee/useDemandeAbandonnee";
-import { useDemandeSpecifique } from "./hooks/notion/AllPages/demandeSpecifique/useDemandeSpecifique";
-import { useDevisCommande } from "./hooks/notion/AllPages/devisCommande/useDevisCommande";
+import { useAllPagesDemandeSpecifique } from "./hooks/AllPages/demandeSpecifique/useAllPagesDemandeSpecifique";
+import { useAllPagesDemandeAbandonnee } from "./hooks/AllPages/demandeAbandonnee/useAllPagesDemandeAbandonnee";
+import { useAllPagesDevisCommande } from "./hooks/AllPages/devisCommande/useAllPagesDevisCommande";
 
 const App = () => {
-  const demandeSpecifique = useDemandeSpecifique();
-  const demandeAbandonne = useDemandeAbandonnee();
-  const devisCommande = useDevisCommande();
+  const demandeSpecifique = useAllPagesDemandeSpecifique();
+  const demandeAbandonne = useAllPagesDemandeAbandonnee();
+  const devisCommande = useAllPagesDevisCommande();
 
   return (
     <>

@@ -11,7 +11,7 @@ interface INotionContextProps {
   children: React.ReactNode;
 }
 
-export const DemandeSpecifiqueContext = createContext<IGetAllPages>({
+export const AllPagesDemandeSpecifiqueContext = createContext<IGetAllPages>({
   type: "",
   length: 0,
   period: {
@@ -19,11 +19,14 @@ export const DemandeSpecifiqueContext = createContext<IGetAllPages>({
     end: "00/00/0000",
   },
 });
-export const DemandeSpecifiqueUpdateContext = createContext<
+
+export const AllPagesDemandeSpecifiqueUpdateContext = createContext<
   Dispatch<SetStateAction<IGetAllPages>>
 >(() => {});
 
-const DemandeSpecifiqueContextProvider = (props: INotionContextProps) => {
+const AllPagesDemandeSpecifiqueContextProvider = (
+  props: INotionContextProps
+) => {
   const [notionData, setNotionData] = useState<IGetAllPages>({
     type: "",
     length: 0,
@@ -51,12 +54,12 @@ const DemandeSpecifiqueContextProvider = (props: INotionContextProps) => {
   }, []);
 
   return (
-    <DemandeSpecifiqueContext.Provider value={notionData}>
-      <DemandeSpecifiqueUpdateContext.Provider value={setNotionData}>
+    <AllPagesDemandeSpecifiqueContext.Provider value={notionData}>
+      <AllPagesDemandeSpecifiqueUpdateContext.Provider value={setNotionData}>
         {props.children}
-      </DemandeSpecifiqueUpdateContext.Provider>
-    </DemandeSpecifiqueContext.Provider>
+      </AllPagesDemandeSpecifiqueUpdateContext.Provider>
+    </AllPagesDemandeSpecifiqueContext.Provider>
   );
 };
 
-export default DemandeSpecifiqueContextProvider;
+export default AllPagesDemandeSpecifiqueContextProvider;
