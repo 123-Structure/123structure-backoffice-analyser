@@ -7,15 +7,16 @@ import {
   IconTrendingDown,
   IconTrendingUp,
 } from "@tabler/icons-react";
+import { IGetAllPages } from "../../data/interfaces/IGetAllPages";
 
 interface NotionDataLengthProps {
-  length: number;
-  type: "demandeSpecifique" | "demandeAbandonnee" | "devisCommande";
+  data: IGetAllPages;
+  subtitle: string;
 }
 
 const NotionDataLength = (props: NotionDataLengthProps) => {
   const title = () => {
-    switch (props.type) {
+    switch (props.data.type) {
       case "demandeSpecifique":
         return "Demande(s) spécifique(s)";
       case "demandeAbandonnee":
@@ -35,7 +36,7 @@ const NotionDataLength = (props: NotionDataLengthProps) => {
   };
 
   const icon = () => {
-    switch (props.type) {
+    switch (props.data.type) {
       case "demandeSpecifique":
         return <IconMessageQuestion color="#CED4DA" style={iconStyle} />;
       case "demandeAbandonnee":
@@ -49,7 +50,7 @@ const NotionDataLength = (props: NotionDataLengthProps) => {
 
   return (
     <Paper shadow="xl" radius="md" p="md" w={"100%"} pos={"relative"}>
-      {props.length > 0 ? (
+      {props.data.length > 0 ? (
         // Display the data when it is available
         <>
           {icon()}
@@ -58,7 +59,7 @@ const NotionDataLength = (props: NotionDataLengthProps) => {
           </Text>
           <Flex gap="xs" justify="flex-start" align="center">
             <Text fw={"bold"} fz={"xl"}>
-              {props.length}
+              {props.data.length}
             </Text>
             {/* <ThemeIcon color="green">
               <IconTrendingUp />
@@ -74,7 +75,7 @@ const NotionDataLength = (props: NotionDataLengthProps) => {
             </Text> */}
           </Flex>
           <Text fz={"xs"} fs={"italic"} c={"gray"}>
-            Depuis le 29/05/2023
+            {props.subtitle}
           </Text>
         </>
       ) : (

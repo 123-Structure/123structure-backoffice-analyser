@@ -1,11 +1,14 @@
 import express from "express";
-import { getDevisCommande, getPastMonthDevisCommande } from "../controllers/devisCommande.controllers";
+import {
+  getAllPages,
+  getAllPagesPastMonth,
+} from "../controllers/notionAPI.controllers";
 
 const devisCommandeRouter = express.Router();
 
 // GET all devisCommande
-devisCommandeRouter.get("/", getDevisCommande);
-// GET all devisCommande
-devisCommandeRouter.get("/pastMonth", getPastMonthDevisCommande);
+devisCommandeRouter.get("/", getAllPages);
+// GET all devisCommande by month
+devisCommandeRouter.get("/pastMonth/:monthAgo", getAllPagesPastMonth);
 
 export default devisCommandeRouter;

@@ -1,7 +1,8 @@
 import NotionDataLength from "./components/utils/NotionDataLength";
-import { useDemandeAbandonnee } from "./hooks/notion/demandeAbandonnee/useDemandeAbandonnee";
-import { useDemandeSpecifique } from "./hooks/notion/demandeSpecifique/useDemandeSpecifique";
-import { useDevisCommande } from "./hooks/notion/devisCommande/useDevisCommande";
+import { Flex } from "@mantine/core";
+import { useDemandeAbandonnee } from "./hooks/notion/AllPages/demandeAbandonnee/useDemandeAbandonnee";
+import { useDemandeSpecifique } from "./hooks/notion/AllPages/demandeSpecifique/useDemandeSpecifique";
+import { useDevisCommande } from "./hooks/notion/AllPages/devisCommande/useDevisCommande";
 
 const App = () => {
   const demandeSpecifique = useDemandeSpecifique();
@@ -10,19 +11,20 @@ const App = () => {
 
   return (
     <>
-      <div
-        className="container"
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          gap: "1rem",
-          padding: "1rem",
-        }}
-      >
-        <NotionDataLength length={demandeSpecifique.length} type={"demandeSpecifique"} />
-        <NotionDataLength length={demandeAbandonne.length} type={"demandeAbandonnee"} />
-        <NotionDataLength length={devisCommande.length} type={"devisCommande"} />
-      </div>
+      <Flex gap="xl" p="xl">
+        <NotionDataLength
+          data={demandeSpecifique}
+          subtitle={`Depuis le ${demandeSpecifique.period.start}`}
+        />
+        <NotionDataLength
+          data={demandeAbandonne}
+          subtitle={`Depuis le ${demandeAbandonne.period.start}`}
+        />
+        <NotionDataLength
+          data={devisCommande}
+          subtitle={`Depuis le ${demandeAbandonne.period.start}`}
+        />
+      </Flex>
     </>
   );
 };
