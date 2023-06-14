@@ -5,36 +5,33 @@ import {
   useEffect,
   useState,
 } from "react";
-import { IGetAllPages } from "../../data/interfaces/IGetAllPages";
+import { IRequestNotionApiResponse } from "../../data/interfaces/IRequestNotionApiResponse";
 
 interface INotionContextProps {
   children: React.ReactNode;
 }
 
-export const AllPagesDemandeSpecifiqueContext = createContext<IGetAllPages>({
+const defaultValue: IRequestNotionApiResponse = {
   type: "",
   length: 0,
   period: {
     start: "00/00/0000",
     end: "00/00/0000",
   },
-});
+};
+
+export const AllPagesDemandeSpecifiqueContext =
+  createContext<IRequestNotionApiResponse>(defaultValue);
 
 export const AllPagesDemandeSpecifiqueUpdateContext = createContext<
-  Dispatch<SetStateAction<IGetAllPages>>
+  Dispatch<SetStateAction<IRequestNotionApiResponse>>
 >(() => {});
 
 const AllPagesDemandeSpecifiqueContextProvider = (
   props: INotionContextProps
 ) => {
-  const [notionData, setNotionData] = useState<IGetAllPages>({
-    type: "",
-    length: 0,
-    period: {
-      start: "00/00/0000",
-      end: "00/00/0000",
-    },
-  });
+  const [notionData, setNotionData] =
+    useState<IRequestNotionApiResponse>(defaultValue);
 
   useEffect(() => {
     const handleDemandeSpecifique = () => {

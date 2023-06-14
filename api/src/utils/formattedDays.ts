@@ -5,7 +5,7 @@ export const formattedDays = (monthsAgo: number) => {
   const currentDate = new Date();
 
   // Subtract the specified number of months from the current date
-  currentDate.setMonth(currentDate.getMonth() - monthsAgo + 1);
+  currentDate.setMonth(currentDate.getMonth() - monthsAgo);
 
   // Set the date to the first day of the current month
   currentDate.setDate(1);

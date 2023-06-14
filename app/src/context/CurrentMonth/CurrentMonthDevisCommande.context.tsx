@@ -14,25 +14,29 @@ interface INotionContextProps {
 const defaultValue: IRequestNotionApiResponse = {
   type: "",
   length: 0,
-  period: {
-    start: "00/00/0000",
-    end: "00/00/0000",
+  difference: {
+    period: {
+      start: "00/00/0000",
+      end: "00/00/0000",
+    },
+    value: 0,
+    percent: 0,
   },
 };
 
-export const AllPagesDevisCommandeContext =
+export const CurrentMonthDevisCommandeContext =
   createContext<IRequestNotionApiResponse>(defaultValue);
-export const AllPagesDevisCommandeUpdateContext = createContext<
+export const CurrentMonthDevisCommandeUpdateContext = createContext<
   Dispatch<SetStateAction<IRequestNotionApiResponse>>
 >(() => {});
 
-const AllPagesDevisCommandeContextProvider = (props: INotionContextProps) => {
+const CurrentMonthDevisCommandeContextProvider = (props: INotionContextProps) => {
   const [notionData, setNotionData] =
     useState<IRequestNotionApiResponse>(defaultValue);
 
   useEffect(() => {
     const handleDevisCommande = () => {
-      fetch("http://localhost:3000/api/devisCommande")
+      fetch("http://localhost:3000/api/devisCommande/currentMonth/0")
         .then((response) => response.json())
         .then((data) => {
           setNotionData(data);
@@ -48,12 +52,12 @@ const AllPagesDevisCommandeContextProvider = (props: INotionContextProps) => {
   }, []);
 
   return (
-    <AllPagesDevisCommandeContext.Provider value={notionData}>
-      <AllPagesDevisCommandeUpdateContext.Provider value={setNotionData}>
+    <CurrentMonthDevisCommandeContext.Provider value={notionData}>
+      <CurrentMonthDevisCommandeUpdateContext.Provider value={setNotionData}>
         {props.children}
-      </AllPagesDevisCommandeUpdateContext.Provider>
-    </AllPagesDevisCommandeContext.Provider>
+      </CurrentMonthDevisCommandeUpdateContext.Provider>
+    </CurrentMonthDevisCommandeContext.Provider>
   );
 };
 
-export default AllPagesDevisCommandeContextProvider;
+export default CurrentMonthDevisCommandeContextProvider;
