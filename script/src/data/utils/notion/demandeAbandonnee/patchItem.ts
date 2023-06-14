@@ -67,7 +67,8 @@ export const patchItem = (demandeAbandonne: IDemande, pages: any[]) => {
     if (
       !status.includes("Terminé") &&
       !status.includes("Archivé") &&
-      !status.includes("En cours")
+      !status.includes("En cours") &&
+      !status.includes("QUARCO")
     ) {
       if (
         currentDate >= new Date(firstContact) &&
