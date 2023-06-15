@@ -5,13 +5,13 @@ import {
   useEffect,
   useState,
 } from "react";
-import { IRequestNotionApiResponse } from "../../data/interfaces/IRequestNotionApiResponse";
+import { IGetCurrentMonthResponse } from "../../data/interfaces/IGetCurrentMonth";
 
 interface INotionContextProps {
   children: React.ReactNode;
 }
 
-const defaultValue: IRequestNotionApiResponse = {
+const defaultValue: IGetCurrentMonthResponse = {
   type: "",
   length: 0,
   difference: {
@@ -25,18 +25,24 @@ const defaultValue: IRequestNotionApiResponse = {
 };
 
 export const CurrentMonthDevisCommandeContext =
-  createContext<IRequestNotionApiResponse>(defaultValue);
+  createContext<IGetCurrentMonthResponse>(defaultValue);
 export const CurrentMonthDevisCommandeUpdateContext = createContext<
-  Dispatch<SetStateAction<IRequestNotionApiResponse>>
+  Dispatch<SetStateAction<IGetCurrentMonthResponse>>
 >(() => {});
 
-const CurrentMonthDevisCommandeContextProvider = (props: INotionContextProps) => {
+const CurrentMonthDevisCommandeContextProvider = (
+  props: INotionContextProps
+) => {
   const [notionData, setNotionData] =
-    useState<IRequestNotionApiResponse>(defaultValue);
+    useState<IGetCurrentMonthResponse>(defaultValue);
 
   useEffect(() => {
     const handleDevisCommande = () => {
-      fetch("http://localhost:3000/api/devisCommande/currentMonth/0")
+      fetch(
+        `http://localhost:3000/api/devisCommande/currentMonth/${
+          new Date().getMonth() + 1
+        }/${new Date().getFullYear()}`
+      )
         .then((response) => response.json())
         .then((data) => {
           setNotionData(data);

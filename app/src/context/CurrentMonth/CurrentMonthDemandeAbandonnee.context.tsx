@@ -5,13 +5,13 @@ import {
   useEffect,
   useState,
 } from "react";
-import { IRequestNotionApiResponse } from "../../data/interfaces/IRequestNotionApiResponse";
+import { IGetCurrentMonthResponse } from "../../data/interfaces/IGetCurrentMonth";
 
 interface INotionContextProps {
   children: React.ReactNode;
 }
 
-const defaultValue: IRequestNotionApiResponse = {
+const defaultValue: IGetCurrentMonthResponse = {
   type: "",
   length: 0,
   difference: {
@@ -25,21 +25,25 @@ const defaultValue: IRequestNotionApiResponse = {
 };
 
 export const CurrentMonthDemandeAbandonneeContext =
-  createContext<IRequestNotionApiResponse>(defaultValue);
+  createContext<IGetCurrentMonthResponse>(defaultValue);
 
 export const CurrentMonthDemandeAbandonneeUpdateContext = createContext<
-  Dispatch<SetStateAction<IRequestNotionApiResponse>>
+  Dispatch<SetStateAction<IGetCurrentMonthResponse>>
 >(() => {});
 
 const CurrentMonthDemandeAbandonneeContextProvider = (
   props: INotionContextProps
 ) => {
   const [notionData, setNotionData] =
-    useState<IRequestNotionApiResponse>(defaultValue);
+    useState<IGetCurrentMonthResponse>(defaultValue);
 
   useEffect(() => {
     const handleDemandeAbandonnee = () => {
-      fetch("http://localhost:3000/api/demandeAbandonnee/currentMonth/0")
+      fetch(
+        `http://localhost:3000/api/demandeAbandonnee/currentMonth/${
+          new Date().getMonth() + 1
+        }/${new Date().getFullYear()}`
+      )
         .then((response) => response.json())
         .then((data) => {
           setNotionData(data);
@@ -56,7 +60,9 @@ const CurrentMonthDemandeAbandonneeContextProvider = (
 
   return (
     <CurrentMonthDemandeAbandonneeContext.Provider value={notionData}>
-      <CurrentMonthDemandeAbandonneeUpdateContext.Provider value={setNotionData}>
+      <CurrentMonthDemandeAbandonneeUpdateContext.Provider
+        value={setNotionData}
+      >
         {props.children}
       </CurrentMonthDemandeAbandonneeUpdateContext.Provider>
     </CurrentMonthDemandeAbandonneeContext.Provider>

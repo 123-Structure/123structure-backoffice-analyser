@@ -5,30 +5,26 @@ import {
   useEffect,
   useState,
 } from "react";
-import { IRequestNotionApiResponse } from "../../data/interfaces/IRequestNotionApiResponse";
+import { IGetAllPagesResponse } from "../../data/interfaces/IGetAllPagesResponse";
 
 interface INotionContextProps {
   children: React.ReactNode;
 }
 
-const defaultValue: IRequestNotionApiResponse = {
+const defaultValue: IGetAllPagesResponse = {
   type: "",
   length: 0,
-  period: {
-    start: "00/00/0000",
-    end: "00/00/0000",
-  },
 };
 
 export const AllPagesDevisCommandeContext =
-  createContext<IRequestNotionApiResponse>(defaultValue);
+  createContext<IGetAllPagesResponse>(defaultValue);
 export const AllPagesDevisCommandeUpdateContext = createContext<
-  Dispatch<SetStateAction<IRequestNotionApiResponse>>
+  Dispatch<SetStateAction<IGetAllPagesResponse>>
 >(() => {});
 
 const AllPagesDevisCommandeContextProvider = (props: INotionContextProps) => {
   const [notionData, setNotionData] =
-    useState<IRequestNotionApiResponse>(defaultValue);
+    useState<IGetAllPagesResponse>(defaultValue);
 
   useEffect(() => {
     const handleDevisCommande = () => {

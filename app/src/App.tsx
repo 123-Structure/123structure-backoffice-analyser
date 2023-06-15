@@ -4,7 +4,7 @@ import CurrentMonthGrid from "./components/CurrentMonthGrid";
 
 const App = () => {
   return (
-    <Flex gap={"md"} direction={"column"} py={"lg"}>
+    <Flex gap={"lg"} direction={"column"} p={"xl"} align={"center"}>
       <AllPagesGrid />
       <CurrentMonthGrid />
     </Flex>

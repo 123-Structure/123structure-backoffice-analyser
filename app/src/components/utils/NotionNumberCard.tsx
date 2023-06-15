@@ -7,15 +7,16 @@ import {
   IconTrendingDown,
   IconTrendingUp,
 } from "@tabler/icons-react";
-import { IRequestNotionApiResponse } from "../../data/interfaces/IRequestNotionApiResponse";
+import { IGetAllPagesResponse } from "../../data/interfaces/IGetAllPagesResponse";
+import { IGetCurrentMonthResponse } from "../../data/interfaces/IGetCurrentMonth";
 
-interface NotionDataCardProps {
-  data: IRequestNotionApiResponse;
+interface NotionNumberCardProps {
+  data: IGetAllPagesResponse | IGetCurrentMonthResponse;
   subtitle: string;
-  difference?: boolean;
 }
 
-const NotionDataCard = (props: NotionDataCardProps) => {
+const NotionNumberCard = (props: NotionNumberCardProps) => {
+
   const title = () => {
     switch (props.data.type) {
       case "demandeSpecifique":
@@ -50,44 +51,42 @@ const NotionDataCard = (props: NotionDataCardProps) => {
   };
 
   const difference = () => {
-    if (props.difference) {
-      if (props.data.difference) {
-        if (props.data.difference.value > 0) {
-          return (
-            <>
-              <ThemeIcon color="green">
-                <IconTrendingUp />
-              </ThemeIcon>
-              <Text fz={"sm"} fw={"600"} mt={"xs"} c={"green"}>
-                {`${props.data.difference.percent}% (${props.data.difference.value})`}
-              </Text>
-            </>
-          );
-        }
-        if (props.data.difference.value < 0) {
-          return (
-            <>
-              <ThemeIcon color="red">
-                <IconTrendingDown />
-              </ThemeIcon>
-              <Text fz={"sm"} fw={"600"} mt={"xs"} c={"red"}>
-                {`${props.data.difference.percent}% (${props.data.difference.value})`}
-              </Text>
-            </>
-          );
-        }
-        if (props.data.difference.value > 0) {
-          return (
-            <>
-              <ThemeIcon color="gray">
-                <IconScale />
-              </ThemeIcon>
-              <Text fz={"sm"} fw={"600"} mt={"xs"} c={"gray"}>
-                {`${props.data.difference.percent}% (${props.data.difference.value})`}
-              </Text>
-            </>
-          );
-        }
+    if ("difference" in props.data && props.data.difference) {
+      if (props.data.difference.value > 0) {
+        return (
+          <>
+            <ThemeIcon color="green">
+              <IconTrendingUp />
+            </ThemeIcon>
+            <Text fz={"sm"} fw={"600"} mt={"xs"} c={"green"}>
+              {`${props.data.difference.percent}% (${props.data.difference.value})`}
+            </Text>
+          </>
+        );
+      }
+      if (props.data.difference.value < 0) {
+        return (
+          <>
+            <ThemeIcon color="red">
+              <IconTrendingDown />
+            </ThemeIcon>
+            <Text fz={"sm"} fw={"600"} mt={"xs"} c={"red"}>
+              {`${props.data.difference.percent}% (${props.data.difference.value})`}
+            </Text>
+          </>
+        );
+      }
+      if (props.data.difference.value > 0) {
+        return (
+          <>
+            <ThemeIcon color="gray">
+              <IconScale />
+            </ThemeIcon>
+            <Text fz={"sm"} fw={"600"} mt={"xs"} c={"gray"}>
+              {`${props.data.difference.percent}% (${props.data.difference.value})`}
+            </Text>
+          </>
+        );
       }
     }
     return <></>;
@@ -95,7 +94,7 @@ const NotionDataCard = (props: NotionDataCardProps) => {
 
   return (
     <Paper
-      shadow="xl"
+      shadow="md"
       radius="md"
       p="md"
       w={"100%"}
@@ -131,4 +130,4 @@ const NotionDataCard = (props: NotionDataCardProps) => {
   );
 };
 
-export default NotionDataCard;
+export default NotionNumberCard;

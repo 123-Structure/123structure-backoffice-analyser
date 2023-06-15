@@ -4,7 +4,8 @@ import { convertToISODate } from "../utils/convertToISODate";
 import { getDatabaseId } from "../utils/getDatabaseId";
 import { formattedDays } from "../utils/formattedDays";
 import { dateOption } from "../data/constants/dateOption";
-import { IRequestNotionApiResponse } from "../data/interfaces/IRequestNotionApiResponse";
+import { IGetAllPagesResponse } from "../data/interfaces/IGetAllPagesResponse";
+import { IGetCurrentMonthResponse } from "../data/interfaces/IGetCurrentMonth";
 
 // Constants
 const apiKey = process.env.NOTION_SECRET_KEY as string;
@@ -28,7 +29,7 @@ export const getAllPages = async (req: Request, res: Response) => {
     });
 
     // Return the result
-    const data: IRequestNotionApiResponse = {
+    const data: IGetAllPagesResponse = {
       type: req.originalUrl.split("/")[2],
       length: pages.results.length,
     };
@@ -40,9 +41,10 @@ export const getAllPages = async (req: Request, res: Response) => {
 };
 
 // GET all pages in a specific database by month
-export const getAllPagesCurrentMonth = async (req: Request, res: Response) => {
+export const getCurrentMonth = async (req: Request, res: Response) => {
   const databaseId = getDatabaseId(req.originalUrl);
-  const monthsAgo = parseInt(req.params.monthAgo);
+  const month = parseInt(req.params.month);
+  const year = parseInt(req.params.year);
 
   const notion = new Client({ auth: apiKey });
 
@@ -56,7 +58,7 @@ export const getAllPagesCurrentMonth = async (req: Request, res: Response) => {
             property: "Créé le",
             date: {
               on_or_after: convertToISODate(
-                formattedDays(monthsAgo).firstDay,
+                formattedDays(month - 1, year).firstDay,
                 "/",
                 "-"
               ),
@@ -66,7 +68,7 @@ export const getAllPagesCurrentMonth = async (req: Request, res: Response) => {
             property: "Créé le",
             date: {
               on_or_before: convertToISODate(
-                formattedDays(monthsAgo).lastDay,
+                formattedDays(month - 1, year).lastDay,
                 "/",
                 "-"
               ),
@@ -84,7 +86,7 @@ export const getAllPagesCurrentMonth = async (req: Request, res: Response) => {
             property: "Créé le",
             date: {
               on_or_after: convertToISODate(
-                formattedDays(monthsAgo - 1).firstDay,
+                formattedDays(month, year).firstDay,
                 "/",
                 "-"
               ),
@@ -94,7 +96,7 @@ export const getAllPagesCurrentMonth = async (req: Request, res: Response) => {
             property: "Créé le",
             date: {
               on_or_before: convertToISODate(
-                formattedDays(monthsAgo - 1).lastDay,
+                formattedDays(month, year).lastDay,
                 "/",
                 "-"
               ),
@@ -105,14 +107,13 @@ export const getAllPagesCurrentMonth = async (req: Request, res: Response) => {
     });
 
     // Return the result
-    const data: IRequestNotionApiResponse = {
+    const data: IGetCurrentMonthResponse = {
       type: req.originalUrl.split("/")[2],
-      month: parseInt(formattedDays(monthsAgo).lastDay.split("/")[1])+1,
       length: currentMonth.results.length,
       difference: {
         period: {
-          start: formattedDays(monthsAgo).firstDay,
-          end: formattedDays(monthsAgo).lastDay,
+          start: formattedDays(month, year).firstDay,
+          end: formattedDays(month, year).lastDay,
         },
         value: currentMonth.results.length - previousMonth.results.length,
         percent: Math.round(
