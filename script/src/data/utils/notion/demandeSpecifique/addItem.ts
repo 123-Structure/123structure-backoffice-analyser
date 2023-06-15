@@ -323,7 +323,7 @@ export const addItem = async (demandeSpecifique: IDemande, retries = 0) => {
                     {
                       type: "text",
                       text: {
-                        content: "Envoi lien unique et mode opératoire",
+                        content: "Envoi devis spécifique",
                       },
                     },
                   ],
