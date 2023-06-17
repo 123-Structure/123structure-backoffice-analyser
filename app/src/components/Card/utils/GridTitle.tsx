@@ -1,11 +1,11 @@
 import { Flex, Text } from "@mantine/core";
 
-interface INotionDataTitleProps {
+interface IGridTitleProps {
   title: string;
   icon: JSX.Element;
 }
 
-const NotionDataTitle = (props: INotionDataTitleProps) => {
+const GridTitle = (props: IGridTitleProps) => {
   return (
     <Flex gap={"sm"}>
       {props.icon}
@@ -16,4 +16,4 @@ const NotionDataTitle = (props: INotionDataTitleProps) => {
   );
 };
 
-export default NotionDataTitle;
+export default GridTitle;

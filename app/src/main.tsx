@@ -9,6 +9,9 @@ import AllPagesDevisCommandeContextProvider from "./context/AllPages/AllPagesDev
 import CurrentMonthDemandeSpecifiqueContextProvider from "./context/CurrentMonth/CurrentMonthDemandeSpecifique.context.tsx";
 import CurrentMonthDemandeAbandonneeContextProvider from "./context/CurrentMonth/CurrentMonthDemandeAbandonnee.context.tsx";
 import CurrentMonthDevisCommandeContextProvider from "./context/CurrentMonth/CurrentMonthDevisCommande.context.tsx";
+import CurrentMonthByCategoryDemandeSpecifiqueContextProvider from "./context/CurrentMonthByCategory/CurrentMonthByCategoryDemandeSpecifique.context.tsx";
+import CurrentMonthByCategoryDemandeAbandonneeContextProvider from "./context/CurrentMonthByCategory/CurrentMonthByCategoryDemandeAbandonnee.context.tsx";
+import CurrentMonthByCategoryDevisCommandeContextProvider from "./context/CurrentMonthByCategory/CurrentMonthByCategoryDevisCommande.context.tsx";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
@@ -18,9 +21,15 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           <CurrentMonthDemandeSpecifiqueContextProvider>
             <CurrentMonthDemandeAbandonneeContextProvider>
               <CurrentMonthDevisCommandeContextProvider>
-                <MantineProvider withGlobalStyles withNormalizeCSS>
-                  <App />
-                </MantineProvider>
+                <CurrentMonthByCategoryDemandeSpecifiqueContextProvider>
+                  <CurrentMonthByCategoryDemandeAbandonneeContextProvider>
+                    <CurrentMonthByCategoryDevisCommandeContextProvider>
+                      <MantineProvider withGlobalStyles withNormalizeCSS>
+                        <App />
+                      </MantineProvider>
+                    </CurrentMonthByCategoryDevisCommandeContextProvider>
+                  </CurrentMonthByCategoryDemandeAbandonneeContextProvider>
+                </CurrentMonthByCategoryDemandeSpecifiqueContextProvider>
               </CurrentMonthDevisCommandeContextProvider>
             </CurrentMonthDemandeAbandonneeContextProvider>
           </CurrentMonthDemandeSpecifiqueContextProvider>

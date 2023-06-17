@@ -13,7 +13,7 @@ interface INotionContextProps {
 
 const defaultValue: IGetAllPagesResponse = {
   type: "",
-  length: 0,
+  length: -1,
 };
 
 export const AllPagesDemandeAbandonneeContext =

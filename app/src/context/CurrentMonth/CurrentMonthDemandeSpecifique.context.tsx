@@ -13,7 +13,7 @@ interface INotionContextProps {
 
 const defaultValue: IGetCurrentMonthResponse = {
   type: "",
-  length: 0,
+  length: -1,
   difference: {
     period: {
       start: "00/00/0000",
