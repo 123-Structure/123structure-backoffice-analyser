@@ -11,6 +11,8 @@ import { getCurrentTimestamp } from "../../../getCurrentTimestamp";
 import { reference } from "./email/reference";
 import { yourQuote } from "./email/yourQuote";
 import { contactDevisSauvegarde } from "./email/contactDevisSauvegarde";
+import { firstReminder } from "./email/firstReminder";
+import { lastReminder } from "./email/lastReminder";
 
 // Initializing a client
 const notion = new Client({
@@ -308,6 +310,34 @@ export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
                     },
                   ],
                   children: contactDevisSauvegarde(devisSauvegarde),
+                },
+              },
+              {
+                object: "block",
+                toggle: {
+                  rich_text: [
+                    {
+                      type: "text",
+                      text: {
+                        content: "1ère relance (J+7)",
+                      },
+                    },
+                  ],
+                  children: firstReminder(devisSauvegarde),
+                },
+              },
+              {
+                object: "block",
+                toggle: {
+                  rich_text: [
+                    {
+                      type: "text",
+                      text: {
+                        content: "Dernière relance (J+14)",
+                      },
+                    },
+                  ],
+                  children: lastReminder(devisSauvegarde),
                 },
               },
               {
