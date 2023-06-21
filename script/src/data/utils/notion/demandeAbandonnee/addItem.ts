@@ -164,7 +164,7 @@ export const addItem = async (demandeAbandonne: IDemande, retries = 0) => {
               {
                 type: "text",
                 text: {
-                  content: `❓ ${demandeAbandonne.ID} - ${demandeAbandonne.Nom} - ${demandeAbandonne["Type de projet"]} (${demandeAbandonne["Code postal"]} ${demandeAbandonne.Ville})`,
+                  content: `🗑️ Administration : ${demandeAbandonne.ID} - ${demandeAbandonne.Nom} - ${demandeAbandonne["Type de projet"]} (${demandeAbandonne["Code postal"]} ${demandeAbandonne.Ville})`,
                   link: {
                     url:
                       demandeAbandonne.Type === "Particulier"
@@ -180,6 +180,27 @@ export const addItem = async (demandeAbandonne: IDemande, retries = 0) => {
                 },
               },
             ],
+          },
+        },
+        {
+          object: "block",
+          paragraph: {
+            rich_text: [
+              {
+                type: "text",
+                text: {
+                  content: `📍 Localisation : ${demandeAbandonne.ID} - ${demandeAbandonne.Nom} - ${demandeAbandonne["Type de projet"]} (${demandeAbandonne["Code postal"]} ${demandeAbandonne.Ville})`,
+                  link: {
+                    url:`https://www.google.fr/maps/place/${demandeAbandonne["Code postal"]}+${demandeAbandonne.Ville}/`                      
+                  },
+                },
+                annotations: {
+                  bold: true,
+                  italic: true,
+                },
+              },
+            ],
+            color: "blue_background"
           },
         },
         {

@@ -154,7 +154,7 @@ export const addItem = async (demandeSpecifique: IDemande, retries = 0) => {
               {
                 type: "text",
                 text: {
-                  content: `❓ ${demandeSpecifique.ID} - ${demandeSpecifique.Nom} - ${demandeSpecifique["Type de projet"]} (${demandeSpecifique["Code postal"]} ${demandeSpecifique.Ville})`,
+                  content: `❓ Administration : ${demandeSpecifique.ID} - ${demandeSpecifique.Nom} - ${demandeSpecifique["Type de projet"]} (${demandeSpecifique["Code postal"]} ${demandeSpecifique.Ville})`,
                   link: {
                     url:
                       demandeSpecifique.Type === "Particulier"
@@ -170,6 +170,27 @@ export const addItem = async (demandeSpecifique: IDemande, retries = 0) => {
                 },
               },
             ],
+          },
+        },
+        {
+          object: "block",
+          paragraph: {
+            rich_text: [
+              {
+                type: "text",
+                text: {
+                  content: `📍 Localisation : ${demandeSpecifique.ID} - ${demandeSpecifique.Nom} - ${demandeSpecifique["Type de projet"]} (${demandeSpecifique["Code postal"]} ${demandeSpecifique.Ville})`,
+                  link: {
+                    url:`https://www.google.fr/maps/place/${demandeSpecifique["Code postal"]}+${demandeSpecifique.Ville}/`                      
+                  },
+                },
+                annotations: {
+                  bold: true,
+                  italic: true,
+                },
+              },
+            ],
+            color: "blue_background"
           },
         },
         {

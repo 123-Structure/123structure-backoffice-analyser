@@ -225,7 +225,7 @@ export const addItem = async (
                 {
                   type: "text",
                   text: {
-                    content: `📝 Administration : ${
+                    content: `🏡 Administration : ${
                       commande["Adresse de chantier"].split("\n")[0]
                     } - Construction neuve (${
                       commande["Adresse de chantier"].split("\n").length === 3
@@ -296,6 +296,61 @@ export const addItem = async (
               ],
             },
           },
+          {
+          object: "block",
+          paragraph: {
+            rich_text: [
+              {
+                type: "text",
+                text: {
+                  content: `📍 Localisation : ${
+                      commande["Adresse de chantier"].split("\n")[0]
+                    } - Construction neuve (${
+                      commande["Adresse de chantier"].split("\n").length === 3
+                        ? commande["Adresse de chantier"]
+                            .split("\n")[2]
+                            .slice(0, 5)
+                        : commande["Adresse de chantier"]
+                            .split("\n")[1]
+                            .slice(0, 5)
+                    } ${
+                      commande["Adresse de chantier"].split("\n").length === 3
+                        ? commande["Adresse de chantier"]
+                            .split("\n")[2]
+                            .substring(7)
+                        : commande["Adresse de chantier"]
+                            .split("\n")[1]
+                            .substring(7)
+                    })`,
+                  link: {
+                    url:`https://www.google.fr/maps/place/${
+                      commande["Adresse de chantier"].split("\n").length === 3
+                        ? commande["Adresse de chantier"]
+                            .split("\n")[2]
+                            .slice(0, 5)
+                        : commande["Adresse de chantier"]
+                            .split("\n")[1]
+                            .slice(0, 5)
+                    }+${
+                      commande["Adresse de chantier"].split("\n").length === 3
+                        ? commande["Adresse de chantier"]
+                            .split("\n")[2]
+                            .substring(7)
+                        : commande["Adresse de chantier"]
+                            .split("\n")[1]
+                            .substring(7)
+                    }/`                      
+                  },
+                },
+                annotations: {
+                  bold: true,
+                  italic: true,
+                },
+              },
+            ],
+            color: "blue_background"
+          },
+        },
           {
             object: "block",
             heading_2: {

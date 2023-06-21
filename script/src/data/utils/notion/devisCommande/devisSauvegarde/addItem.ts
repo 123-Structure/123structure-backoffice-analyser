@@ -171,7 +171,7 @@ export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
               {
                 type: "text",
                 text: {
-                  content: `📝 Administration : ${
+                  content: `🏡 Administration : ${
                     devisSauvegarde["Adresse de chantier"].split("\n")[0]
                   } - Construction neuve (${devisSauvegarde[
                     "Adresse de chantier"
@@ -220,6 +220,41 @@ export const addItem = async (devisSauvegarde: IDevisCommande, retries = 0) => {
                 },
               },
             ],
+          },
+        },
+        {
+          object: "block",
+          paragraph: {
+            rich_text: [
+              {
+                type: "text",
+               text: {
+                  content: `📍 Localisation : ${
+                    devisSauvegarde["Adresse de chantier"].split("\n")[0]
+                  } - Construction neuve (${devisSauvegarde[
+                    "Adresse de chantier"
+                  ]
+                    .split("\n")[2]
+                    .slice(0, 5)} ${devisSauvegarde["Adresse de chantier"]
+                    .split("\n")[2]
+                    .substring(6)})`,
+                  link: {
+                    url: `https://www.google.fr/maps/place/${devisSauvegarde[
+                    "Adresse de chantier"
+                  ]
+                    .split("\n")[2]
+                    .slice(0, 5)}+${devisSauvegarde["Adresse de chantier"]
+                    .split("\n")[2]
+                    .substring(6)}/`,
+                  },
+                },
+                annotations: {
+                  bold: true,
+                  italic: true,
+                },
+              },
+            ],
+            color: "blue_background"
           },
         },
         {
