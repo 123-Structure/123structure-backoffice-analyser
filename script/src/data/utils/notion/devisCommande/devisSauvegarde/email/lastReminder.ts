@@ -80,6 +80,8 @@ Lien pour suivre votre commande : ${devisSauvegarde["Lien unique"]}
 <break>
 
 <break>
+Vous êtes un professionnel du secteur du bâtiment et/ou de la construction ? Nous vous invitons à nous l'indiquer afin de vous faire bénéficier de nos tarifs et avantages qui vous sont réservés.
+<break>
 Merci de votre compréhension et de votre coopération.
 <break>
 Bonne journée

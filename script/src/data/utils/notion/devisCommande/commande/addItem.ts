@@ -9,6 +9,9 @@ import { extractID } from "../../utils/extractID";
 import { getCurrentTimestamp } from "../../../getCurrentTimestamp";
 import { IUrl } from "../../../../interfaces/IUrl";
 import { getStatusFromUrl } from "../getStatusFromUrl";
+import { reference } from "./email/reference";
+import { emailObject } from "./email/emailObject";
+import { yourOrder } from "./email/yourOrder";
 
 // Initializing a client
 const notion = new Client({
@@ -395,7 +398,53 @@ export const addItem = async (
                   },
                 },
               ],
-              children: [],
+              children: [
+              {
+                object: "block",
+                paragraph: {
+                  rich_text: [
+                    {
+                      type: "text",
+                      text: {
+                        content: `Objet : ${emailObject(commande)}`,
+                      },
+                      annotations: {
+                        italic: true,
+                      },
+                    },
+                  ],
+                  color: "yellow_background",
+                },
+              },
+              {
+                object: "block",
+                toggle: {
+                  rich_text: [
+                    {
+                      type: "text",
+                      text: {
+                        content: "Envoi lien unique et mode opératoire",
+                      },
+                    },
+                  ],
+                  children: yourOrder(commande),
+                },
+              },
+              {
+                object: "block",
+                toggle: {
+                  rich_text: [
+                    {
+                      type: "text",
+                      text: {
+                        content: "Référence",
+                      },
+                    },
+                  ],
+                  children: reference(commande),
+                },
+              },
+            ],
             },
           },
         ],
